@@ -1,0 +1,26 @@
+CREATE DATABASE Plaisr;
+
+USE Plaisir;
+
+CREATE TABLE Mediator(
+  id_Mediator INT NOT NULL AUTO_INCREMENT,
+  mail VARCHAR(45) NOT NULL,
+  nom VARCHAR(45) NOT NULL,
+  prenom VARCHAR(45) NOT NULL,
+  PRIMARY KEY(id_Mediator)
+);
+
+CREATE TABLE Candidat(
+  id_Candidat INT NOT NULL AUTO_INCREMENT,
+  mail VARCHAR(45) NOT NULL,
+  nom VARCHAR(45) NOT NULL,
+  prenom VARCHAR(45) NOT NULL,
+  ville VARCHAR(45) NOT NULL,
+  naissance VARCHAR(45) NOT NULL,
+  PRIMARY KEY(id_Candidat)
+);
+
+CREATE TABLE PESD(
+  id_PESD INT NOT NULL AUTO_INCREMENT,
+  
+);
