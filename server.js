@@ -9,9 +9,12 @@ app.set('view engine','ejs');
 app.use('/',express.static('/public'));
 
 app.get('/' , (req,res) =>{
-	res.render('index.ejs');
+	res.render('index');
 });
 
+app.get('/signup',(req,res)=>{
+	res.render('signup');
+});
 
 
 
