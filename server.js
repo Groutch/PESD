@@ -13,7 +13,7 @@ app.get('/' , (req,res) =>{
 });
 
 app.get('/signup',(req,res)=>{
-	res.render('signup');
+	res.render('forms/signup');
 });
 
 app.get('/dashboard-c' , (req,res) => {
@@ -27,3 +27,5 @@ const PORT = process.env.PORT || 8080;
 app.listen(PORT , (req,res) => {
 	console.log('Connected');
 });
+
+module.exports = app ;
