@@ -16,6 +16,10 @@ app.get('/signup',(req,res)=>{
 	res.render('signup');
 });
 
+app.get('/dashboard-c' , (req,res) => {
+	res.render('dashboard_candidat/index.ejs');
+});
+
 
 
 const PORT = process.env.PORT || 8080; 
