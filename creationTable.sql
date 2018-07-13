@@ -1,27 +1,27 @@
 CREATE DATABASE Plaisir;
 USE Plaisir;
 
+CREATE TABLE Role(
+idRole INT NOT NULL AUTO_INCREMENT,
+nomRole VARCHAR(45) NOT NULL,
+PRIMARY KEY(idRole)
+);
 
-CREATE TABLE Candidat(
-  idCandidat INT NOT NULL AUTO_INCREMENT,
+
+CREATE TABLE Personne(
+  idPersonne INT NOT NULL AUTO_INCREMENT,
   nom VARCHAR(45) NOT NULL,
   prenom VARCHAR(45) NOT NULL,
   mail VARCHAR(45) NOT NULL,
   ville VARCHAR(45) NOT NULL,
   pays VARCHAR(45) NOT NULL,
   naissance DATE NOT NULL,
-  password VARCHAR(45) NOT NULL,
-  PRIMARY KEY(idCandidat)
+  password VARCHAR(128) NOT NULL,
+  idRole INT NOT NULL,
+  PRIMARY KEY(idPersonne),
+  FOREIGN KEY(idRole) REFERENCES Role(idRole)
   );
-  
-CREATE TABLE Mediateur(
-  idMediateur INT NOT NULL AUTO_INCREMENT,
-  nom VARCHAR(45) NOT NULL,
-  prenom VARCHAR(45) NOT NULL,
-  mail VARCHAR(45) NOT NULL,
-  password VARCHAR(45) NOT NULL,
-  PRIMARY KEY(idMediateur)
-  );
+ 
  
  CREATE TABLE PESD(
    idPESD INT NOT NULL AUTO_INCREMENT,
@@ -29,8 +29,8 @@ CREATE TABLE Mediateur(
    idMediateur INT NOT NULL,
    idCandidat INT NOT NULL,
    PRIMARY KEY(idPESD),
-   FOREIGN KEY(idMediateur) REFERENCES Mediateur(idMediateur),
-   FOREIGN KEY(idCandidat) REFERENCES Candidat(idCandidat)
+   FOREIGN KEY(idMediateur) REFERENCES Personne(idPersonne),
+   FOREIGN KEY(idCandidat) REFERENCES Personne(idPersonne)
    );
    
  CREATE TABLE Reponse(
