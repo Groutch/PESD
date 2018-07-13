@@ -13,7 +13,7 @@ app.get('/' , (req,res) =>{
 });
 
 app.get('/signup',(req,res)=>{
-	res.render('signup');
+	res.render('forms/signup');
 });
 
 app.get('/dashboard-c' , (req,res) => {

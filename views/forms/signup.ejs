@@ -1,21 +1,25 @@
 <%include ../partials/head.ejs%>
-<nav class="navbar navbar-expand-xl navbar-dark bg-light fixed-top">
-	<a class="navbar-brand mr-auto" href="#"><img width="30%" height="auto" src="http://plaisir-dapprendre.com/image/logo.png"></a>
-
-	<ul class="navbar-nav justify-content-end">
-		<li class="nav-item">
-			<a class="nav-link text-dark" href="#">S'inscrire</a>
-		</li>
-		<li class="nav-item">
-			<a class="nav-link text-dark" href="#">Se connecter</a>
-		</li>
-	</ul>
-</nav> 
-<div class="container">
-	<form>
-		<input type="text" name="">
-		<input type="text" name="">
-		<button type="submit">Valider</button>
-	</form>  
-</div>     
+<%include ../partials/navbar.ejs%> 
+<div class="container"><center>
+	<form class="" method="POST" action="/signup">
+		<div class="form-group">
+			<label for="test">Nom</label>
+			<input type="text" id="test" name="teiufez">
+		</div>
+		<div class="form-group">
+			<label for="test2">Prenom</label>
+			<input type="text" id="test2" name="">
+		</div>
+		<div class="form-group">
+			<label for="test3">Mail</label>
+			<input type="text" id="test3" name="">
+		</div>
+		<div class="form-group">
+			<label for="test4">Mot de passe</label>
+			<input type="text" id="test4" name="">
+		</div>
+		<button class="btn btn-primary" type="submit">S'inscrire</button>
+	</form>
+</center>
+</div>
 <%include ../partials/footer.ejs%>
