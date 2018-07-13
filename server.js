@@ -52,8 +52,6 @@ app.post('/signup', (req, res) => {
 
 });
 
-<<<<<<< HEAD
-=======
 
 //Tableau de bord d'un candidat une fois connecté
 app.get('/dashboard-c' , (req,res) => {
@@ -64,7 +62,6 @@ app.get('/signin',(req,res)=>{
 	res.render('forms/signin');
 });
 //Lancement serveur pour app type heroku ou port 8080
->>>>>>> 30dad8f0dd96efc3851241fcb9f559b0c68ca1fd
 const PORT = process.env.PORT || 8080; 
 
 app.listen(PORT, (req, res) => {
