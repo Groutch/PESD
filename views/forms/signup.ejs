@@ -1,21 +1,37 @@
 <%include ../partials/head.ejs%>
-<nav class="navbar navbar-expand-xl navbar-dark bg-light fixed-top">
-	<a class="navbar-brand mr-auto" href="#"><img width="30%" height="auto" src="http://plaisir-dapprendre.com/image/logo.png"></a>
-
-	<ul class="navbar-nav justify-content-end">
-		<li class="nav-item">
-			<a class="nav-link text-dark" href="#">S'inscrire</a>
-		</li>
-		<li class="nav-item">
-			<a class="nav-link text-dark" href="#">Se connecter</a>
-		</li>
-	</ul>
-</nav> 
-<div class="container">
-	<form>
-		<input type="text" name="">
-		<input type="text" name="">
-		<button type="submit">Valider</button>
-	</form>  
-</div>     
+<%include ../partials/navbar.ejs%> 
+<div class="container"><center>
+	<form method="POST" action="/signup">
+		<div class="form-group">
+			<label class="form-text" for='nom'>Nom</label>
+			<input type="text" name="Nom" id="nom">
+		</div>
+		<div class="form-group">
+			<label class="form-text" for="Prenom">Prenom</label>			
+			<input type="text" name="Prenom" id="Prenom">
+		</div>
+		<div class="form-group">
+			<label class="form-text" for="Mail">Mail</label>	
+			<input type="text" name="Mail" id="Mail">
+		</div>
+		<div class="form-group">
+			<label class="form-text" for="password">Mot de passe</label>
+			<input type="password" name="password" id="password">
+		</div>
+		<div class="form-group">
+			<label class="form-text" for="Pays">Pays</label>
+			<input type="text" name="Pays" id="Pays">
+		</div>
+		<div class="form-group">
+			<label class="form-text" for="Ville">Ville</label>
+			<input type="text" name="Ville" id="Ville">
+		</div>
+		<div class="form-group">
+			<label for="datenais" class="form-text">Date de naissance</label>
+			<input type="date" name="date_naissance" id="datenais">
+		</div>
+		<button class="btn btn-primary" type="submit">S'inscrire</button>
+	</form>
+</center>
+</div>
 <%include ../partials/footer.ejs%>
