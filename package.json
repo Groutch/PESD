@@ -5,6 +5,7 @@
   "main": "server.js",
   "scripts": {
     "test": "mocha",
+    "test-watch" : "nodemon --exec 'npm test'",
     "start": "node server.js"
   },
   "repository": {
