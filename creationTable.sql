@@ -9,7 +9,7 @@ CREATE TABLE Candidat(
   mail VARCHAR(45) NOT NULL,
   ville VARCHAR(45) NOT NULL,
   pays VARCHAR(45) NOT NULL,
-  naissance VARCHAR(45) NOT NULL,
+  naissance DATE NOT NULL,
   password VARCHAR(45) NOT NULL,
   PRIMARY KEY(idCandidat)
   );

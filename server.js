@@ -1,12 +1,15 @@
 const express = require('express');
 const app = express();
+const passport = require('passport');
+const LocalStrategy = require('passport-local').Strategy;
+var bcrypt = require('bcrypt');
 
 const bodyparser = require('body-parser')
 app.use(bodyparser.urlencoded({ extended: false }))
 
 app.set('view engine','ejs');
 
-app.use('/',express.static('/public'));
+app.use('/',express.static('public'));
 
 app.get('/' , (req,res) =>{
 	res.render('index');
