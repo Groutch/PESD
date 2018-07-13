@@ -6,7 +6,11 @@
   "scripts": {
     "test": "mocha",
     "test-watch": "nodemon --exec 'npm test'",
+<<<<<<< HEAD
     "start": "nodemon server.js"
+=======
+    "start": "node server.js"
+>>>>>>> 30dad8f0dd96efc3851241fcb9f559b0c68ca1fd
   },
   "repository": {
     "type": "git",
@@ -19,9 +23,14 @@
   },
   "homepage": "https://github.com/Groutch/PESD#readme",
   "dependencies": {
+    "bcrypt": "^3.0.0",
     "body-parser": "^1.18.3",
     "ejs": "^2.6.1",
-    "express": "^4.16.3"
+    "express": "^4.16.3",
+    "mysql": "^2.15.0",
+    "mysql2": "^1.5.3",
+    "passport": "^0.4.0",
+    "passport-local": "^1.0.0"
   },
   "devDependencies": {
     "expect": "^23.4.0",
