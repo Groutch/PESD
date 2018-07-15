@@ -6,7 +6,7 @@
   "scripts": {
     "test": "mocha",
     "test-watch": "nodemon --exec 'npm test'",
-    "start": "node server.js"
+    "start": "nodemon server.js"
   },
   "repository": {
     "type": "git",
@@ -29,6 +29,7 @@
     "passport-local": "^1.0.0"
   },
   "devDependencies": {
+    "expect": "^23.4.0",
     "should": "^13.2.1",
     "supertest": "^3.1.0"
   }
