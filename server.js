@@ -89,6 +89,7 @@ app.post('/signin',(req,res) =>{
 	var pass= req.body.pass;
 	var sqlLogin="SELECT idPersonne, nom, prenom, mail, ville, pays, naissance, idRole, password FROM Personne WHERE `mail`='"+mail+"'";
 	connection.query(sqlLogin, (err, result) => {
+		if(result.length){
 		bcrypt.compare(pass, result[0].password, function(err, rescrypt) {
     	// rescrypt == true le mot de passe correspond
 			if(rescrypt){
@@ -101,6 +102,11 @@ app.post('/signin',(req,res) =>{
 				res.render('forms/signin',{message:message});
 			}
 		});
+	}else{
+		console.log("mauvais login");
+		let message='Login incorrect';
+		res.render('forms/signin',{message:message});
+	}
 	});
 });
 
