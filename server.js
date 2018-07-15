@@ -18,10 +18,11 @@ app.get('/' , (req,res) =>{
 });
 //Page d'inscription
 app.get('/signup',(req,res)=>{
-	res.render('forms/signup');
+	let message='';
+	res.render('forms/signup',{message:message});
 });
 
-//Lors qu'on valide le formulaire d'inscription
+//Lorsqu'on valide le formulaire d'inscription
 app.post('/signup', (req, res) => {
     //on liste tous les mails utilisateurs
     let sqlListMails = "SELECT mail FROM Personne";
@@ -31,7 +32,16 @@ app.post('/signup', (req, res) => {
             return;
         }
         //si le mail pas trouvé dans la liste
-        if (result.indexOf(req.body.Mail) == -1) {
+				let message = '';
+				let found=false;
+				console.log(req.body.Mail);
+				for (var i=0; i<result.length; i++){
+					console.log(result[i].mail);
+					if(result[i].mail == req.body.Mail){
+						found = found||true;
+					}
+				}
+        if (!found) {
             //on hash le password
             bcrypt.hash(req.body.password, 10, function (err, hash) {
                 let sqlInsertCandidate = "INSERT INTO Personne (nom, prenom, mail, ville, pays, naissance, password, idRole) VALUES('" + req.body.Nom + "','" + req.body.Prenom + "','" + req.body.Mail + "','" + req.body.Ville + "','" + req.body.Pays + "','" + req.body.date_naissance + "','" + hash + "',2)";
@@ -41,15 +51,16 @@ app.post('/signup', (req, res) => {
                         console.error(err);
                         return;
                     }
+
                     res.redirect("/");
                 });
             });
 
         } else {
-            res.redirect("/signup");
+						message = 'Le mail existe déjà';
+            res.render('forms/signup',{message:message});
         }
     });
-
 });
 
 
@@ -59,10 +70,16 @@ app.get('/dashboard-c' , (req,res) => {
 });
 //Page de connexion
 app.get('/signin',(req,res)=>{
-	res.render('forms/signin');
+	let message=''
+	res.render('forms/signin',{message:message});
 });
+//Lorsqu'on valide le formulaire de connexion
+app.post('/signin',(req,res) =>{
+
+});
+
 //Lancement serveur pour app type heroku ou port 8080
-const PORT = process.env.PORT || 8080; 
+const PORT = process.env.PORT || 8080;
 
 app.listen(PORT, (req, res) => {
     console.log('Connected');

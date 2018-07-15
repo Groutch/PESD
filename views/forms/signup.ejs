@@ -1,17 +1,20 @@
 <%include ../partials/head.ejs%>
-<%include ../partials/navbar.ejs%> 
+<%include ../partials/navbar.ejs%>
 <div class="container"><center>
+	<% if (message.length > 0) { %>
+		<div class="alert alert-danger col-sm-12"><%= message %></div>
+	<% } %>
 	<form method="POST" action="/signup">
 		<div class="form-group">
 			<label class="form-text" for='nom'>Nom</label>
 			<input type="text" name="Nom" id="nom">
 		</div>
 		<div class="form-group">
-			<label class="form-text" for="Prenom">Prenom</label>			
+			<label class="form-text" for="Prenom">Prenom</label>
 			<input type="text" name="Prenom" id="Prenom">
 		</div>
 		<div class="form-group">
-			<label class="form-text" for="Mail">Mail</label>	
+			<label class="form-text" for="Mail">Mail</label>
 			<input type="text" name="Mail" id="Mail">
 		</div>
 		<div class="form-group">
