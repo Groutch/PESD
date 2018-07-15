@@ -2,8 +2,15 @@ const express = require('express');
 const app = express();
 const passport = require('passport');
 const LocalStrategy = require('passport-local').Strategy;
-var bcrypt = require('bcrypt');
+const bcrypt = require('bcrypt');
 const connection = require('./connect');
+const session = require('express-session');
+app.use(session({
+  secret: 'keyboard cat',
+  resave: false,
+  saveUninitialized: true,
+  cookie: { maxAge: 60000 }
+}))
 
 const bodyparser = require('body-parser');
 //Utilisation body parser pour les recuperer des inputs
@@ -14,7 +21,11 @@ app.set('view engine','ejs');
 app.use('/',express.static('public'));
 //Page accueil du site
 app.get('/' , (req,res) =>{
-	res.render('index');
+	let userdisp='';
+	if(req.session.user){
+		userdisp = req.session.user.prenom;
+	}
+	res.render('index',{user:userdisp});
 });
 //Page d'inscription
 app.get('/signup',(req,res)=>{
@@ -45,7 +56,6 @@ app.post('/signup', (req, res) => {
             //on hash le password
             bcrypt.hash(req.body.password, 10, function (err, hash) {
                 let sqlInsertCandidate = "INSERT INTO Personne (nom, prenom, mail, ville, pays, naissance, password, idRole) VALUES('" + req.body.Nom + "','" + req.body.Prenom + "','" + req.body.Mail + "','" + req.body.Ville + "','" + req.body.Pays + "','" + req.body.date_naissance + "','" + hash + "',2)";
-                console.log(sqlInsertCandidate);
                 connection.query(sqlInsertCandidate, (err, result) => {
                     if (err) {
                         console.error(err);
@@ -75,7 +85,23 @@ app.get('/signin',(req,res)=>{
 });
 //Lorsqu'on valide le formulaire de connexion
 app.post('/signin',(req,res) =>{
-
+	var mail= req.body.mail;
+	var pass= req.body.pass;
+	var sqlLogin="SELECT idPersonne, nom, prenom, mail, ville, pays, naissance, idRole, password FROM Personne WHERE `mail`='"+mail+"'";
+	connection.query(sqlLogin, (err, result) => {
+		bcrypt.compare(pass, result[0].password, function(err, rescrypt) {
+    	// rescrypt == true le mot de passe correspond
+			if(rescrypt){
+				console.log("bon password");
+        req.session.user = result[0];
+				res.redirect('/');
+			}else{
+				console.log("mauvais password");
+				let message='Mot de passe incorrect';
+				res.render('forms/signin',{message:message});
+			}
+		});
+	});
 });
 
 //Lancement serveur pour app type heroku ou port 8080
