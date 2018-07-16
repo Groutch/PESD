@@ -16,6 +16,31 @@ describe('GET /signup' , ()=>{
 	});
 });
 
+/*describe('POST /signup' , () => {
+	it('should create a user' , (done)=>{
+		let testuser = {
+		'last' : 'toto',
+		'first' : 'eustache',
+		'email' : 'signup@test.com',
+		'pass' : 'testtest',
+		'city' : 'Paris',
+		'country' : 'France',
+		'birth' : '1980-05-05'
+	}
+
+		request(app)
+		.post('/signup')
+		.send(testuser)
+		.end((err,res)=> {
+			should.exist(res);
+			res.status.should.be.equal(200);
+			res.body.email.should.be.equal('signup@test.com');
+			done();
+		});
+
+	});
+}); */
+
 describe('GET /' , ()=>{
 	it('should return homepage', (done)=>{
 		request(app)
@@ -39,4 +64,6 @@ describe('GET /dashboard-c' , ()=>{
 		});
 	});
 });
+
+
 
