@@ -19,24 +19,36 @@ describe('GET /signup' , ()=>{
 /*describe('POST /signup' , () => {
 	it('should create a user' , (done)=>{
 		let testuser = {
-		'last' : 'toto',
-		'first' : 'eustache',
-		'email' : 'signup@test.com',
-		'pass' : 'testtest',
-		'city' : 'Paris',
-		'country' : 'France',
-		'birth' : '1980-05-05'
+		'Nom' : 'toto',
+		'Prenom' : 'eustache',
+		'Mail' : 'signup@test.com',
+		'password' : 'testtest',
+		'Pays' : 'Paris',
+		'Ville' : 'France',
+		'date_naissance' : '1980-05-05'
 	}
 
 		request(app)
 		.post('/signup')
 		.send(testuser)
+		.expect(200)
+		.expect(res => {
+
+		})
+		.end(err=>{
+			if(err){
+				return done(err)
+			}
+		})
+
+		.done()
+
 		.end((err,res)=> {
 			should.exist(res);
 			res.status.should.be.equal(200);
 			res.body.email.should.be.equal('signup@test.com');
 			done();
-		});
+		}); 
 
 	});
 }); */
@@ -53,10 +65,10 @@ describe('GET /' , ()=>{
 	});
 });
 
-describe('GET /dashboard-c' , ()=>{
-	it('should return dashboard_candidate page', (done)=>{
+describe('GET /dashboard' , ()=>{
+	it('should return dashboard page', (done)=>{
 		request(app)
-		.get('/dashboard-c')
+		.get('/dashboard')
 		.end((err, res) => {
 			should.exist(res);
 			res.status.should.be.equal(200);
