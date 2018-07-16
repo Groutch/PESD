@@ -97,7 +97,6 @@ app.get('/dashboard', (req, res) => {
         			res.render('dashboard_mediateur/index',{result:result});
         		}
         	})
-            
         } else if (req.session.user.idRole == 2) {
             res.render('dashboard_candidat/index',{user:req.session.user});
         }
