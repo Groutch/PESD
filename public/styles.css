@@ -1,9 +1,3 @@
-body {
-	/background-image:url('https://dl.phncdn.com/gif/9756372.gif');
-	background-repeat:repeat;
-	background-size: 250px 150px;
-}
-
 nav {
 	background-color:#F4F4F4FF;
 }
@@ -12,4 +6,13 @@ nav {
 	margin-top:50px;
 	margin-left:15%;
 	background-color:#F4F4F4FF;
+}
+
+#dashboard {
+	margin-top:50px;
+	margin-left:15%;
+}
+
+.btn-lg {
+	margin-bottom: 30px;
 }

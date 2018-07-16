@@ -11,7 +11,7 @@ app.use(session({
     resave: false,
     saveUninitialized: true,
     cookie: {
-        maxAge: 60000
+        maxAge: 6000000000
     }
 }))
 
@@ -89,9 +89,17 @@ app.post('/signup', (req, res) => {
 app.get('/dashboard', (req, res) => {
     if (req.session.user) {
         if (req.session.user.idRole == 1) {
-            res.render('dashboard_mediateur/index');
+        	let lst= "SELECT nom,prenom,DATE_FORMAT(date,'%d/%m/%Y %H:%i') AS 'date' FROM Personne,PESD WHERE Personne.idPersonne = PESD.idCandidat;";
+        	connection.query(lst,(err,result)=>{
+        		if(err){
+        			console.log(err);
+        		}else {
+        			res.render('dashboard_mediateur/index',{result:result});
+        		}
+        	})
+            
         } else if (req.session.user.idRole == 2) {
-            res.render('dashboard_candidat/index');
+            res.render('dashboard_candidat/index',{user:req.session.user});
         }
     }else{
         res.redirect("/");
