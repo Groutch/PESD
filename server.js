@@ -129,6 +129,17 @@ app.get('/signin', (req, res) => {
         message: message
     });
 });
+app.get('/candidat/:id',(req,res)=>{
+    let candidat=req.body.candidat;
+    let cand=`Select * FROM Personne WHERE nom = ${candidat} OR prenom = ${candidat};`
+    connection.query(cand,(err,result)=>{
+        if(err){
+            console.log(err)
+        }else {
+            res.render('dashboard_mediateur/index',{result:result})
+        }
+    })
+})
 //Lorsqu'on valide le formulaire de connexion
 app.post('/signin', (req, res) => {
     var mail = req.body.mail;
