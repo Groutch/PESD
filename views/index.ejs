@@ -12,8 +12,12 @@
 			<p>Le test du PESD peut être accompagné de séances de médiation cognitive.</p>
 		</div>
 		<div class="col-sm">
+            <% if (user.length > 0) { %>
+            <a class="form-text" href="/dashboard"><button class="btn btn-primary btn-lg">Dashboard</button></a>
+            <% } else{ %>
 			<a class="form-text" href="/signin"><button class="btn btn-primary">Connexion</button></a>
 			<a class="form-text" href="/signup"><button class="btn btn-primary">Inscription</button></a>
+            <% } %>
 		</div>
 	</div>
 	<div class="row">
