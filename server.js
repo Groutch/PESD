@@ -101,7 +101,7 @@ app.get('/dashboard', (req, res) => {
         } else if (req.session.user.idRole == 2) {
             let sqlListPESDCand = "SELECT PESD.idPESD, DATE_FORMAT(PESD.date,'%d/%m/%Y %H:%i') AS 'date', Personne.nom as nom,Personne.prenom as prenom FROM PESD, Personne WHERE PESD.idCandidat="+req.session.user.idPersonne+" AND PESD.idMediateur = Personne.idPersonne AND DATEDIFF(PESD.date, NOW()) < 0; SELECT PESD.idPESD, DATE_FORMAT(PESD.date,'%d/%m/%Y %H:%i') AS 'date', Personne.nom as nom,Personne.prenom as prenom FROM PESD, Personne WHERE PESD.idCandidat="+req.session.user.idPersonne+" AND PESD.idMediateur = Personne.idPersonne AND DATEDIFF(PESD.date, NOW()) >= 0;";
             connection.query(sqlListPESDCand,(err,result)=>{
-                console.log(result);
+                console.log(req.session.user);
                 res.render('dashboard_candidat/index',{user:req.session.user, histoPESD:result[0], futurPESD:result[1]});
             });
             
@@ -109,6 +109,29 @@ app.get('/dashboard', (req, res) => {
     }else{
         res.redirect("/");
     }
+});
+
+//lorsqu'on souhaite modifier les infos utilisateur dans le dashboard:
+app.post('/modifyInfos', (req,res) =>{
+    let nom = req.body.Nom;
+    let prenom = req.body.Prenom;
+    let ville = req.body.Ville;
+    let pays = req.body.Pays;
+    let naissance = req.body.date_naissance;
+    let sqlModInfos = "UPDATE Personne SET nom ='"+nom+"', prenom = '"+prenom+"', ville = '"+ville+"', pays = '"+pays+"', naissance = '"+naissance+"' WHERE Personne.idPersonne ="+req.session.user.idPersonne;
+    connection.query(sqlModInfos,(err,result)=>{
+        if(err){
+            console.log(err);
+        }
+    })
+    //lorsque les modifications sont apportées on pense à modifier req.session.user avec les nouvelles infos
+    let sqlUpdateUserInfo = "SELECT idPersonne, nom, prenom, mail, ville, pays, naissance, idRole, password FROM Personne WHERE idPersonne = "+req.session.user.idPersonne;
+    connection.query(sqlUpdateUserInfo,(err,result)=>{
+        req.session.user = result[0];
+        console.log(req.session.user);
+        res.redirect("/dashboard");
+    });
+     
 });
 
 app.get('/dashboard/startPESD' , (req,res) => {
