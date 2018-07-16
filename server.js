@@ -5,6 +5,7 @@ const LocalStrategy = require('passport-local').Strategy;
 const bcrypt = require('bcrypt');
 const connection = require('./connect');
 const session = require('express-session');
+const nodemailer = require('nodemailer');
 
 app.use(session({
     secret: 'keyboard cat',
