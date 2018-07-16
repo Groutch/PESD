@@ -89,7 +89,7 @@ app.post('/signup', (req, res) => {
 app.get('/dashboard', (req, res) => {
     if (req.session.user) {
         if (req.session.user.idRole == 1) {
-        	let lst= "SELECT nom,prenom,DATE_FORMAT(date,'%d/%m/%Y %H:%i') AS 'date' FROM Personne,PESD WHERE Personne.idPersonne = PESD.idCandidat;";
+        	let lst= "SELECT nom,prenom,DATE_FORMAT(date,'%d/%m/%Y %H:%i') AS 'date' FROM Personne,PESD WHERE Personne.idPersonne = PESD.idCandidat AND DATEDIFF(PESD.date,NOW())>=0 ORDER BY date;";
         	connection.query(lst,(err,result)=>{
         		if(err){
         			console.log(err);
