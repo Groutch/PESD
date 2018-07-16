@@ -36,7 +36,9 @@ app.get('/', (req, res) => {
 //Page d'inscription
 app.get('/signup', (req, res) => {
     let message = '';
-    res.render('forms/signup', {message: message});
+    res.render('forms/signup', {
+        message: message
+    });
 });
 
 //Lorsqu'on valide le formulaire d'inscription
@@ -74,20 +76,32 @@ app.post('/signup', (req, res) => {
 
         } else {
             message = 'Le mail existe déjà';
-            res.render('forms/signup', {message: message});
+            res.render('forms/signup', {
+                message: message
+            });
         }
     });
 });
 
 
 //Tableau de bord d'un candidat une fois connecté
-app.get('/dashboard-c', (req, res) => {
-    res.render('dashboard_candidat/index.ejs');
+app.get('/dashboard', (req, res) => {
+    if (req.session.user) {
+        if (req.session.user.idRole == 1) {
+            res.render('dashboard_mediateur/index');
+        } else if (req.session.user.idRole == 2) {
+            res.render('dashboard_candidat/index');
+        }
+    }else{
+        res.redirect("/");
+    }
 });
 //Page de connexion
 app.get('/signin', (req, res) => {
     let message = ''
-    res.render('forms/signin', {message: message});
+    res.render('forms/signin', {
+        message: message
+    });
 });
 //Lorsqu'on valide le formulaire de connexion
 app.post('/signin', (req, res) => {
@@ -105,13 +119,17 @@ app.post('/signin', (req, res) => {
                 } else {
                     console.log("mauvais password");
                     let message = 'Mot de passe incorrect';
-                    res.render('forms/signin', {message: message});
+                    res.render('forms/signin', {
+                        message: message
+                    });
                 }
             });
         } else {
             console.log("mauvais login");
             let message = 'Login incorrect';
-            res.render('forms/signin', {message: message});
+            res.render('forms/signin', {
+                message: message
+            });
         }
     });
 });
