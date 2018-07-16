@@ -5,6 +5,7 @@ const LocalStrategy = require('passport-local').Strategy;
 const bcrypt = require('bcrypt');
 const connection = require('./connect');
 const session = require('express-session');
+const nodemailer = require('nodemailer');
 
 app.use(session({
     secret: 'keyboard cat',
@@ -89,7 +90,7 @@ app.post('/signup', (req, res) => {
 app.get('/dashboard', (req, res) => {
     if (req.session.user) {
         if (req.session.user.idRole == 1) {
-        	let lst= "SELECT nom,prenom,DATE_FORMAT(date,'%d/%m/%Y %H:%i') AS 'date' FROM Personne,PESD WHERE Personne.idPersonne = PESD.idCandidat;";
+        	let lst= "SELECT nom,prenom,DATE_FORMAT(date,'%d/%m/%Y %H:%i') AS 'date' FROM Personne,PESD WHERE Personne.idPersonne = PESD.idCandidat AND DATEDIFF(PESD.date,NOW())>=0 ORDER BY date;";
         	connection.query(lst,(err,result)=>{
         		if(err){
         			console.log(err);
@@ -97,7 +98,6 @@ app.get('/dashboard', (req, res) => {
         			res.render('dashboard_mediateur/index',{result:result});
         		}
         	})
-            
         } else if (req.session.user.idRole == 2) {
             let sqlListPESDCand = "SELECT PESD.idPESD, DATE_FORMAT(PESD.date,'%d/%m/%Y %H:%i') AS 'date', Personne.nom as nom,Personne.prenom as prenom FROM PESD, Personne WHERE PESD.idCandidat="+req.session.user.idPersonne+" AND PESD.idMediateur = Personne.idPersonne; SELECT PESD.idPESD, DATE_FORMAT(PESD.date,'%d/%m/%Y %H:%i') AS 'date', Personne.nom as nom,Personne.prenom as prenom FROM PESD, Personne WHERE PESD.idCandidat="+req.session.user.idPersonne+" AND PESD.idMediateur = Personne.idPersonne AND DATEDIFF(NOW(),PESD.date) >= 0;";
             connection.query(sqlListPESDCand,(err,result)=>{
