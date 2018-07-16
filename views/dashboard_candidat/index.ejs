@@ -1,8 +1,31 @@
 <%- include ../partials/head.ejs %>
 
-<%- include ../partials/navbar.ejs %>
+    <%- include ../partials/navbar.ejs %>
+        <div class="container">
+            <h1>CANDIDAT:
+                <%=user.prenom %>
+                    <%=user.nom %>
+            </h1>
+            <div class="row">
+                <div class="col-md" id="agenda">
+                    <h4>PESD à venir:</h4>
+                    <ul>
+                    </ul>
+                    <button class="btn btn-primary btn-lg">Commencer PESD</button>
+                </div>
+                <div class="col-md" id="PESDHistory">
+                    <h4>Historique des PESD:</h4>
+                </div>
+                <div class="col-md" id="account">
+                    <h4>Info Utilisateur:</h4>
+                    <p>Nom: <%=user.nom%></p>
+                    <p>Prenom: <%=user.prenom%></p>
+                    <p>Ville: <%=user.ville%></p>
+                    <p>Pays: <%=user.pays%></p>
+                    <button class="btn btn-primary btn-lg">Modifier</button>
+                </div>
+            </div>
+        </div>
 
-<%- include ../partials/sub-navbar.ejs %>
-<h1>CANDIDAT</h1>
-<%- include ../partials/footer.ejs %>
 
+        <%- include ../partials/footer.ejs %>
