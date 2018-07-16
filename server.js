@@ -5,6 +5,7 @@ const LocalStrategy = require('passport-local').Strategy;
 const bcrypt = require('bcrypt');
 const connection = require('./connect');
 const session = require('express-session');
+
 app.use(session({
     secret: 'keyboard cat',
     resave: false,
@@ -96,6 +97,18 @@ app.get('/dashboard', (req, res) => {
         res.redirect("/");
     }
 });
+
+app.get('/dashboard/startPESD' , (req,res) => {
+    if (req.session.user) {
+        if (req.session.user.idRole == 1) {
+            res.redirect('/') // à changer pour afficher le PESD du médiateur
+        } else if (req.session.user.idRole == 2) {
+            res.render('PESD/index');
+        }
+    } else res.redirect('/');
+
+});
+
 //Page de connexion
 app.get('/signin', (req, res) => {
     let message = ''
@@ -134,11 +147,23 @@ app.post('/signin', (req, res) => {
     });
 });
 
+
 //Lancement serveur pour app type heroku ou port 8080
 const PORT = process.env.PORT || 8080;
 
-app.listen(PORT, (req, res) => {
+server = app.listen(PORT, (req, res) => {
     console.log('Connected');
 });
+
+// socket
+
+const io = require('socket.io')(server);
+
+io.on('connection' , socket => {
+    socket.on('answer' , data => {
+        socket.broadcast.emit('answer' , {answer : data.answer} );
+    });
+});
+
 
 module.exports = app;
