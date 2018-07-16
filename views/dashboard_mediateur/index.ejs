@@ -1,5 +1,34 @@
-<%include ./partials/head.ejs%>
-<%include ./partials/navbar.ejs%>
-<!-- insere un code ici -->
-<h1>hello</h1>
-<%include ./partials/footer.ejs%>
+<%include ../partials/head.ejs%>
+<%include ../partials/navbar.ejs%>
+<div class="container" id='dashboard'>
+	<div class="row">
+		<div class="col-sm">
+			<button class="btn btn-primary btn-lg">Ajouter un candidat</button>
+		</div>
+		<div class="col-sm">
+			<button class="btn btn-primary btn-lg">Prévoir un PESD</button>
+		</div>
+	</div>
+	<div class="row">
+		<div class="col-sm">
+			<button class="btn btn-primary btn-lg">Lancer le Test</button>
+		</div>
+		<div class="col-sm">
+			<button class="btn btn-primary btn-lg">Rechercher un candidat</button>
+		</div>
+	</div>
+	<div class="row">
+		<div class="col-sm">
+			<button class="btn btn-primary btn-lg">Statistiques</button>
+		</div>
+	</div>
+</div>
+<div class="container">
+	<h4><strong>Liste de candidats en attente de PESD :</strong></h4>
+	<% result.forEach(element=>{%>
+	<p>
+		<%=element.nom +' '+ element.prenom +' '+element.date%>
+	</p>
+	<%})%> 
+</div>
+<%include ../partials/footer.ejs%>
