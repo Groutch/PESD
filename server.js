@@ -99,7 +99,12 @@ app.get('/dashboard', (req, res) => {
         	})
             
         } else if (req.session.user.idRole == 2) {
-            res.render('dashboard_candidat/index',{user:req.session.user});
+            let sqlListPESDCand = "SELECT PESD.idPESD, DATE_FORMAT(PESD.date,'%d/%m/%Y %H:%i') AS 'date', Personne.nom as nom,Personne.prenom as prenom FROM PESD, Personne WHERE PESD.idCandidat="+req.session.user.idPersonne+" AND PESD.idMediateur = Personne.idPersonne; SELECT PESD.idPESD, DATE_FORMAT(PESD.date,'%d/%m/%Y %H:%i') AS 'date', Personne.nom as nom,Personne.prenom as prenom FROM PESD, Personne WHERE PESD.idCandidat="+req.session.user.idPersonne+" AND PESD.idMediateur = Personne.idPersonne AND DATEDIFF(NOW(),PESD.date) >= 0;";
+            connection.query(sqlListPESDCand,(err,result)=>{
+                console.log(result);
+                res.render('dashboard_candidat/index',{user:req.session.user, histoPESD:result[0], futurPESD:result[1]});
+            });
+            
         }
     }else{
         res.redirect("/");

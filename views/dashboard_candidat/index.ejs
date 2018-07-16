@@ -9,12 +9,16 @@
             <div class="row">
                 <div class="col-md" id="agenda">
                     <h4>PESD à venir:</h4>
-                    <ul>
-                    </ul>
+                    <% futurPESD.forEach(function(PES) {%>
+                    <p>PESD du <%=PES.date%> <br/> avec <%=PES.prenom%> <%=PES.nom%></p>
+                    <% }); %>
                     <button class="btn btn-primary btn-lg">Commencer PESD</button>
                 </div>
                 <div class="col-md" id="PESDHistory">
                     <h4>Historique des PESD:</h4>
+                    <% histoPESD.forEach(function(PESD) {%>
+                    <p><a href="/viewPESD<%=PESD.idPESD%>"> PESD du <%=PESD.date%> <br/> avec <%=PESD.prenom%> <%=PESD.nom%></a>
+                    <% }); %></p>
                 </div>
                 <div class="col-md" id="account">
                     <h4>Info Utilisateur:</h4>
