@@ -25,6 +25,7 @@ app.use(bodyparser.urlencoded({
 app.set('view engine', 'ejs');
 //Utilisation du css dans le dossier public
 app.use('/', express.static('public'));
+app.use('/candidat',express.static('public'))
 //Page accueil du site
 app.get('/', (req, res) => {
     let userdisp = '';
@@ -152,6 +153,21 @@ app.get('/signin', (req, res) => {
         message: message
     });
 });
+app.post('/candidat',(req,res)=>{
+    let candidat=req.body.candidat;
+    res.redirect('/candidat/'+candidat+'');
+})
+app.get('/candidat/:id',(req,res)=>{
+    let candidate = req.params.id;
+    let cand=`Select nom,prenom,mail,ville,DATE_FORMAT(naissance,'%d/%m/%Y') AS 'naissance' FROM Personne WHERE nom = '${candidate}' OR prenom = '${candidate}';`;
+       connection.query(cand,(err,result)=>{
+        if(err){
+            console.log(err)
+        }else {
+            res.render('dashboard_mediateur/index',{candidat:result})
+        }
+    })
+})
 //Lorsqu'on valide le formulaire de connexion
 app.post('/signin', (req, res) => {
     var mail = req.body.mail;
