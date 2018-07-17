@@ -5,8 +5,8 @@
   "main": "server.js",
   "scripts": {
     "test": "mocha",
-    "test-watch": "nodemon --exec 'npm test'",
-    "start": "nodemon server.js"
+    "test-watch": "node --exec 'npm test'",
+    "start": "node server.js"
   },
   "repository": {
     "type": "git",
