@@ -14,7 +14,20 @@ app.use(session({
     cookie: {
         maxAge: 6000000000
     }
-}))
+}));
+//Fonction anti-injection
+function secure(str) {
+        if (str == null) return '';
+
+        return String(str).
+            replace(/&/g, '&amp;').
+            replace(/</g, '&lt;').
+            replace(/>/g, '&gt;').
+            replace(/"/g, '&quot;').
+            replace(/'/g, '&#039;').
+            replace(/--/g, '&#151;');
+            replace(/;/g, '&#59;');
+    };
 
 const bodyparser = require('body-parser');
 //Utilisation body parser pour les recuperer des inputs
@@ -132,16 +145,25 @@ app.get('/signin', (req, res) => {
 });
 app.post('/candidat',(req,res)=>{
     let candidat=req.body.candidat;
+    if(candidat==''){
+        res.redirect('/dashboard')
+    }else
     res.redirect('/candidat/'+candidat+'');
 })
 app.get('/candidat/:id',(req,res)=>{
-    let candidate = req.params.id;
+    let candidate = secure(req.params.id);
     let cand=`Select nom,prenom,mail,ville,DATE_FORMAT(naissance,'%d/%m/%Y') AS 'naissance' FROM Personne WHERE nom = '${candidate}' OR prenom = '${candidate}';`;
        connection.query(cand,(err,result)=>{
         if(err){
             console.log(err)
-        }else {
+        }else if(req.session.user){
+            if(req.session.user.idRole == 1){
             res.render('dashboard_mediateur/index',{candidat:result})
+        }else {
+            res.redirect('/dashboard');
+        }
+        }else{
+            res.redirect('/dashboard');
         }
     })
 })
