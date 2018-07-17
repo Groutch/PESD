@@ -1,0 +1,76 @@
+<%- include ../partials/head.ejs %>
+
+    <%- include ../partials/navbar.ejs %>
+        <div class="container">
+            <h1>CANDIDAT:
+                <%=user.prenom %>
+                    <%=user.nom %>
+            </h1>
+            <div class="row">
+                <div class="col-md" id="agenda">
+                    <h4>PESD à venir :</h4>
+                    <% futurPESD.forEach(function(PES) {%>
+                        <p>PESD du <%=PES.date%> <br/>
+                            avec <%=PES.prenom%> <%=PES.nom%>
+                        </p>
+                        <% }); %>
+                            <a href="/startPESD"><button class="btn btn-primary btn-lg" >Commencer PESD</button></a>
+                </div>
+                <div class="col-md" id="PESDHistory">
+                    <h4>Historique des PESD:</h4>
+                    <% histoPESD.forEach(function(PESD) {%>
+                        <p><a href="/viewPESD<%=PESD.idPESD%>"> PESD du <%=PESD.date%> <br/> avec <%=PESD.prenom%> <%=PESD.nom%></a>
+                            <% }); %>
+                        </p>
+                </div>
+                <div class="col-md" id="account">
+                    <h4>Info Utilisateur:</h4>
+                    <div id="displayAccount">
+                        <p>Nom:
+                            <%=user.nom%>
+                        </p>
+                        <p>Prenom:
+                            <%=user.prenom%>
+                        </p>
+                        <p>Ville:
+                            <%=user.ville%>
+                        </p>
+                        <p>Pays:
+                            <%=user.pays%>
+                        </p>
+                        <p>Date de Naissance:
+                            <%=user.naissance%>
+                        </p>
+                        <button class="btn btn-primary btn-lg" id="askModInfos">Modifier</button>
+                    </div>
+                    <div id="formModifyAccount">
+                        <form method="POST" action="/modifyInfos">
+                            <div class="form-group">
+                                <label class="form-text" for='nom'>Nom</label>
+                                <input type="text" name="Nom" id="nom" value="<%=user.nom%>">
+                            </div>
+                            <div class="form-group">
+                                <label class="form-text" for="Prenom">Prenom</label>
+                                <input type="text" name="Prenom" id="Prenom" value="<%=user.prenom%>">
+                            </div>
+                            <div class="form-group">
+                                <label class="form-text" for="Ville">Ville</label>
+                                <input type="text" name="Ville" id="Ville" value="<%=user.ville%>">
+                            </div>
+                            <div class="form-group">
+                                <label class="form-text" for="Pays">Pays</label>
+                                <input type="text" name="Pays" id="Pays"  value="<%=user.pays%>">
+                            </div>
+                            <div class="form-group">
+                                <label for="datenais" class="form-text">Date de naissance</label>
+                                <input type="date" name="date_naissance" id="datenais" value="<%=user.naissance%>">
+                            </div>
+                            <button class="btn btn-primary" type="submit">Modifier</button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+
+        <%- include ../partials/footer.ejs %>

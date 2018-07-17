@@ -1,0 +1,20 @@
+<%include ../partials/head.ejs%>
+<%include ../partials/navbar.ejs%>
+<div class="container"><center>
+	<% if (message.length > 0) { %>
+		<div class="alert alert-danger col-sm-12"><%= message %></div>
+	<% } %>
+	<form method="POST" action="/signin">
+		<div class="form-group">
+			<label class="form-text" for='mail'>Mail</label>
+			<input type="email" name="mail" id="mail">
+		</div>
+		<div class="form-group">
+			<label class="form-text" for="pass">Mot de passe</label>
+			<input type="password" name="pass" id="pass">
+		</div>
+		<button class="btn btn-primary" type="submit">Se connecter</button>
+	</form>
+</center>
+</div>
+<%include ../partials/footer.ejs%>

@@ -5,11 +5,10 @@
 	<title>CDC</title>
 </head>
 <body>
-	
+
 
 
 <h1>Objectif et contexte</h1>
-
 
 Le PESD est un test qui permet de construire des séances de médiation. A la fin des
 séances de médiation, la personne sera amenée à repasser le test. Les deux tests
@@ -31,10 +30,11 @@ le faire évoluer pour intégrer de nouvelles fonctionnalités.
 Nous disposons d’un hébergement pour notre site internet www.plaisir-
 dapprendre.com (hébergement mutualisé chez OVH)
 
-
 <h1>Expression du besoin</h1>
 
-Nous voulons un outil qui nous permet de passer des tests en ligne. Faire en sorte que ce soit  accessible à tout le monde possédant le matériel audio/vidéo requis. Traiter des données de manière automatique ainsi que de les compiler.
+Nous voulons un outil qui nous permet de passer des tests en ligne.
+Faire en sorte que ce soit  accessible à tout le monde possédant le matériel vidéo requis.
+Traiter des données de manière automatique ainsi que de les compiler.
 
 <h1>Fonctionnalités</h1>
 Les nouvelles fonctionnalités que nous souhaitons avoir avec ce nouveau logiciel :
@@ -48,7 +48,90 @@ numérisé
 
 3. Gérer les profils utilisateurs
 4. Consolider l’ensemble des données générées par l’ensemble des tests pour
-produire des statistiques globales. 
+produire des statistiques globales.
+
+<h1>Liste d'exigences</h1>
+
+1. Inscription/connexion
+a. Formulaire
+i. Civilité
+ii. Prénom
+iii. Nom
+iv. Date de naissance
+v. Adresse/code postale/Ville/Pays
+vi. N° TEL
+vii. Email
+b. Mail d’inscription
+c. Mail pour informer que la création d’un compte pour quelqu’un
+
+2. Suppression du compte
+a. Destruction du compte client
+b. Conservation des données pour l’administrateur et le formateur
+
+3. Création d’un test PESD, Cela est défini par :
+a. Un créateur
+b. Un candidat (existant ou non, envoi d’un email le cas échéant avec
+réconciliation de compte une fois le compte créé)
+c. Un Pré-test ou un Post-test
+d. Une date de début
+e. Une norme (dépend de l’âge du candidat)
+f. Un candidat peut demander à passer un test de PESD de lui-même.
+Il doit alors payer directement sur la plateforme. Il sera alors
+associé à l’association plaisir d’apprendre. L’association attribuera
+ensuite un formateur qui sera en charge du candidat.
+
+4. La cotation
+a. Par saisi dans la page web
+i. Scoring en fonction des mots-clés identifiés
+
+5. L’affichage des résultats
+a. Présentation d’un graphique accompagné d’un compte rendu
+rédigé par le formateur
+b. Il apparaît pour chaque stratégie une restitution qui peut être
+commentée par le médiateur.
+
+6. Tableau de bord
+a. Profil Candidat :
+i. Mes tests PESD (pré-test et post-test), affichage du résultat
+obtenu pour les 23 stratégies avec les remarques du
+médiateur
+b. Profil Médiateur :
+i. Création d’un nouveau test PESD pour un candidat (existant
+ou non)
+ii. Cotation d’un PESD (avec compte rendu sur les 23
+stratégies)
+iii. Consulter les PESD de ses candidats
+iv. Afficher les statistiques de ses candidats par rapport aux
+valeurs moyennes
+c. Profil association plaisir d’apprendre
+i. Création d’un nouveau test PESD pour un candidat (existant
+ou non)
+ii. Associer un candidat à un médiateur
+iii. Consulter tous résultat des PESD réalisés par tous les
+médiateurs
+iv. Afficher toutes les statistiques par rapport aux valeurs
+moyennes
+v. Créer/modifier des mots-clés pour la cotation automatique
+
+7. Statistiques
+a. Afficher le nombre de test réalisés
+i. Par tranche d’âge
+ii. Par Ville
+iii. Par Pays
+iv. Par jours/mois/an
+b. Afficher le score moyen sur les coefficients d’efficience
+i. Par tranche d’âge
+ii. Par Ville
+iii. Par Pays
+iv. Par jours/mois/an
+c. Afficher le score moyen par stratégie
+i. Par tranche d’âge
+ii. Par Ville
+iii. Par Pays
+iv. Par jours/mois/an
+d. Créer de nouvelles normes
+i. Par tranche d’âge
+ii. Par jours/mois/an
 
 </body>
 </html>

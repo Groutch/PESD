@@ -1,0 +1,60 @@
+CREATE DATABASE Plaisir;
+USE Plaisir;
+
+CREATE TABLE Role(
+idRole INT NOT NULL AUTO_INCREMENT,
+nomRole VARCHAR(45) NOT NULL,
+PRIMARY KEY(idRole)
+);
+
+
+CREATE TABLE Personne(
+  idPersonne INT NOT NULL AUTO_INCREMENT,
+  nom VARCHAR(45) NOT NULL,
+  prenom VARCHAR(45) NOT NULL,
+  mail VARCHAR(45) NOT NULL,
+  ville VARCHAR(45) NOT NULL,
+  pays VARCHAR(45) NOT NULL,
+  naissance DATE NOT NULL,
+  password VARCHAR(128) NOT NULL,
+  idRole INT NOT NULL,
+  PRIMARY KEY(idPersonne),
+  FOREIGN KEY(idRole) REFERENCES Role(idRole)
+  );
+ 
+ 
+ CREATE TABLE PESD(
+   idPESD INT NOT NULL AUTO_INCREMENT,
+   date DATETIME NOT NULL,
+   idMediateur INT NOT NULL,
+   idCandidat INT NOT NULL,
+   PRIMARY KEY(idPESD),
+   FOREIGN KEY(idMediateur) REFERENCES Personne(idPersonne),
+   FOREIGN KEY(idCandidat) REFERENCES Personne(idPersonne)
+   );
+   
+ CREATE TABLE Reponse(
+     idReponse INT NOT NULL AUTO_INCREMENT,
+     numReponse VARCHAR(2) NOT NULL,
+     reponse TEXT NOT NULL,
+     idPESD INT NOT NULL,
+     PRIMARY KEY(idReponse),
+     FOREIGN KEY(idPESD) REFERENCES PESD(idPESD)
+     );
+
+CREATE TABLE Cotation(
+  idCotation INT NOT NULL AUTO_INCREMENT,
+  cotation VARCHAR(45) NOT NULL,
+  numstrat VARCHAR(45) NOT NULL,
+  idPESD INT NOT NULL,
+  PRIMARY KEY(idCotation),
+  FOREIGN KEY(idPESD) REFERENCES PESD(idPESD)
+  );
+
+CREATE TABLE MotClef(
+  idMotClef INT NOT NULL AUTO_INCREMENT,
+  mot VARCHAR(45) NOT NULL,
+  valeur INT NOT NULL,
+  numReponse VARCHAR(2),
+  PRIMARY KEY(idMotClef)
+  );

@@ -1,0 +1,42 @@
+<%include ../partials/head.ejs%>
+<%include ../partials/navbar.ejs%>
+<div class="container" id='dashboard'>
+	<div class="row">
+		<div class="col-sm">
+			<button class="btn btn-primary btn-lg">Prévoir un PESD</button>
+		</div>
+		<div class="col-sm">
+			<button class="btn btn-danger btn-lg">Lancer le Test</button>
+		</div>
+	</div>
+	<div class="row">
+		<div class="col-sm">
+			<button class="btn btn-primary btn-lg">Statistiques</button>
+		</div>
+		<div class="col-sm">
+			<form class="form-inline my-2 my-lg-0" action="/candidat" method="POST">
+				<input class="form-control mr-sm-2" type="search" placeholder="Rechercher un candidat" aria-label="Search" name="candidat">
+				<button class="btn btn-primary my-2 my-sm-0 btn-lg" type="submit">Search</button>
+			</form>
+		</div>
+	</div>
+</div>
+<div class="container">
+	<%if (locals.result){%>
+	<h4><strong>Liste de candidats en attente de PESD :</strong></h4>
+	<% result.forEach(element=>{%>
+	<p>
+		<%=element.nom +' '+ element.prenom +' '+element.date%>
+	</p>
+	<%})%> 
+	<%}%>
+	<%if (locals.candidat){%>
+	<h4><strong>Information du candidat recherché :</strong></h4>
+	<%candidat.forEach(element=>{%>
+	<p>
+		<%=element.nom+' '%><%=element.prenom+' '%><br><%=element.mail+' '%><br><%=element.ville+' '%><br> <%=element.naissance%>
+	</p>
+	<%})%>
+	<%}%>
+</div>
+<%include ../partials/footer.ejs%>

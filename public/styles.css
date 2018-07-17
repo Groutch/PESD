@@ -1,0 +1,18 @@
+nav {
+	background-color:#F4F4F4FF;
+}
+
+#panneau {
+	margin-top:50px;
+	margin-left:15%;
+	background-color:#F4F4F4FF;
+}
+
+#dashboard {
+	margin-top:50px;
+	margin-left:15%;
+}
+
+.btn-lg {
+	margin-bottom: 30px;
+}
