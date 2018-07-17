@@ -4,6 +4,7 @@ let connection = mysql.createConnection({
     host: 'den1.mysql6.gear.host',
     user: 'plaisir',
     password: 'Ht33_oz8j_3z',
+    dateStrings:true,
     database: 'plaisir'
 });
 

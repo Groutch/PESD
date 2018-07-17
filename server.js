@@ -32,16 +32,16 @@ app.get('/', (req, res) => {
     if (req.session.user) {
         userdisp = req.session.user.prenom;
     }
-    res.render('index', {
-        user: userdisp
-    });
+    res.render('index', {username: userdisp});
 });
 //Page d'inscription
 app.get('/signup', (req, res) => {
     let message = '';
-    res.render('forms/signup', {
-        message: message
-    });
+    let userdisp = '';
+    if (req.session.user) {
+        userdisp = req.session.user.prenom;
+    }
+    res.render('forms/signup', {message: message, username:userdisp});
 });
 
 //Lorsqu'on valide le formulaire d'inscription
@@ -78,10 +78,12 @@ app.post('/signup', (req, res) => {
             });
 
         } else {
+            let userdisp = '';
+            if (req.session.user) {
+                userdisp = req.session.user.prenom;
+            }
             message = 'Le mail existe déjà';
-            res.render('forms/signup', {
-                message: message
-            });
+            res.render('forms/signup', {message: message, username:userdisp});
         }
     });
 });
@@ -90,20 +92,21 @@ app.post('/signup', (req, res) => {
 //Tableau de bord d'un candidat une fois connecté
 app.get('/dashboard', (req, res) => {
     if (req.session.user) {
+        let userdisp = req.session.user.prenom;
         if (req.session.user.idRole == 1) {
         	let lst= "SELECT nom,prenom,DATE_FORMAT(date,'%d/%m/%Y %H:%i') AS 'date' FROM Personne,PESD WHERE Personne.idPersonne = PESD.idCandidat AND DATEDIFF(PESD.date,NOW())>=0 ORDER BY date;";
         	connection.query(lst,(err,result)=>{
         		if(err){
         			console.log(err);
         		}else {
-        			res.render('dashboard_mediateur/index',{result:result});
+                    
+        			res.render('dashboard_mediateur/index',{result:result, username:userdisp});
         		}
         	})
         } else if (req.session.user.idRole == 2) {
             let sqlListPESDCand = "SELECT PESD.idPESD, DATE_FORMAT(PESD.date,'%d/%m/%Y %H:%i') AS 'date', Personne.nom as nom,Personne.prenom as prenom FROM PESD, Personne WHERE PESD.idCandidat="+req.session.user.idPersonne+" AND PESD.idMediateur = Personne.idPersonne AND DATEDIFF(PESD.date, NOW()) < 0; SELECT PESD.idPESD, DATE_FORMAT(PESD.date,'%d/%m/%Y %H:%i') AS 'date', Personne.nom as nom,Personne.prenom as prenom FROM PESD, Personne WHERE PESD.idCandidat="+req.session.user.idPersonne+" AND PESD.idMediateur = Personne.idPersonne AND DATEDIFF(PESD.date, NOW()) >= 0;";
             connection.query(sqlListPESDCand,(err,result)=>{
-                console.log(req.session.user);
-                res.render('dashboard_candidat/index',{user:req.session.user, histoPESD:result[0], futurPESD:result[1]});
+                res.render('dashboard_candidat/index',{user:req.session.user, histoPESD:result[0], futurPESD:result[1], username:userdisp});
             });
             
         }
@@ -149,8 +152,12 @@ app.get('/dashboard/startPESD' , (req,res) => {
 //Page de connexion
 app.get('/signin', (req, res) => {
     let message = ''
+    let userdisp = '';
+    if (req.session.user) {
+        userdisp = req.session.user.prenom;
+    }
     res.render('forms/signin', {
-        message: message
+        message: message, username:userdisp
     });
 });
 app.post('/candidat',(req,res)=>{
@@ -164,7 +171,11 @@ app.get('/candidat/:id',(req,res)=>{
         if(err){
             console.log(err)
         }else {
-            res.render('dashboard_mediateur/index',{candidat:result})
+            let userdisp = '';
+            if (req.session.user) {
+                userdisp = req.session.user.prenom;
+            }
+            res.render('dashboard_mediateur/index',{candidat:result, username:userdisp})
         }
     })
 })
@@ -192,13 +203,22 @@ app.post('/signin', (req, res) => {
         } else {
             console.log("mauvais login");
             let message = 'Login incorrect';
+            let userdisp = '';
+            if (req.session.user) {
+                userdisp = req.session.user.prenom;
+            }
             res.render('forms/signin', {
-                message: message
+                message: message, username:userdisp
             });
         }
     });
 });
-
+//Logout
+app.get('/logout',(req,res)=>{
+    req.session.destroy((err)=>{
+        res.redirect('/');
+    });
+});
 
 //Lancement serveur pour app type heroku ou port 8080
 const PORT = process.env.PORT || 8080;

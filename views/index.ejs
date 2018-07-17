@@ -2,7 +2,7 @@
 <%include ./partials/navbar.ejs%>
 <div class="container" id="panneau">
 	<div class="row">
-			<h1>Bienvenue <% if (user.length > 0) { %><%= user %><% } %></h1>
+			<h1>Bienvenue <% if (username.length > 0) { %><%= username %><% } %></h1>
 	</div>
 	<div class="row">
 		<div class="col-sm">
@@ -12,7 +12,7 @@
 			<p>Le test du PESD peut être accompagné de séances de médiation cognitive.</p>
 		</div>
 		<div class="col-sm">
-            <% if (user.length > 0) { %>
+            <% if (username.length > 0) { %>
             <a class="form-text" href="/dashboard"><button class="btn btn-primary btn-lg">Dashboard</button></a>
             <% } else{ %>
 			<a class="form-text" href="/signin"><button class="btn btn-primary">Connexion</button></a>
