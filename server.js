@@ -151,7 +151,7 @@ app.post('/modifyInfos', (req,res) =>{
      
 });
 
-app.get('/dashboard/startPESD' , (req,res) => {
+app.get('/startPESD' , (req,res) => {
     if (req.session.user) {
         if (req.session.user.idRole == 1) {
             res.redirect('/') // à changer pour afficher le PESD du médiateur
