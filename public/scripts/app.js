@@ -13,6 +13,6 @@ $('#answer').keyup(()=>{
 
 socket.on('answer' , data => {
 	$('#answer').text(data.answer);
-})
+});
 
 
