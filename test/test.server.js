@@ -5,7 +5,7 @@ const expect = require('expect');
 
 
 describe('GET /signup' , ()=>{
-	it('should return signup page', (done)=>{
+	it('should return signup page', done=>{
 		request(app)
 		.get('/signup')
 		.end((err, res) => {
@@ -16,45 +16,45 @@ describe('GET /signup' , ()=>{
 	});
 });
 
-/*describe('POST /signup' , () => {
-	it('should create a user' , (done)=>{
-		let testuser = {
-		'Nom' : 'toto',
-		'Prenom' : 'eustache',
-		'Mail' : 'signup@test.com',
-		'password' : 'testtest',
-		'Pays' : 'Paris',
-		'Ville' : 'France',
-		'date_naissance' : '1980-05-05'
-	}
+/*describe('POST /signup' , ()=>{
+	it('should not create user if mail already used' , done=>{
 
-		request(app)
-		.post('/signup')
-		.send(testuser)
-		.expect(200)
-		.expect(res => {
+	});
 
-		})
-		.end(err=>{
-			if(err){
-				return done(err)
-			}
-		})
-
-		.done()
-
-		.end((err,res)=> {
-			should.exist(res);
-			res.status.should.be.equal(200);
-			res.body.email.should.be.equal('signup@test.com');
-			done();
-		}); 
+	it('should create user and return homepage' , done =>{
 
 	});
 }); */
 
+describe('GET /signin' ,()=>{
+	it('should return signin page', done=>{
+		request(app)
+		.get('/signin')
+		.end((err, res) => {
+			should.exist(res);
+			res.status.should.be.equal(200);
+			done();
+		});
+	});
+});
+
+/*describe('POST /signin' ,()=>{
+	it('should not login user if wrong password' , done=>{
+
+	});
+
+	it('should not login user if wrong mail' , done=>{
+
+	});
+
+	it('should login user and return homepage' , done=>{
+
+	});
+
+}); */
+
 describe('GET /' , ()=>{
-	it('should return homepage', (done)=>{
+	it('should return homepage', done=>{
 		request(app)
 		.get('/')
 		.end((err, res) => {
@@ -66,10 +66,26 @@ describe('GET /' , ()=>{
 });
 
 describe('GET /dashboard' , ()=>{
-	it('should return dashboard page', (done)=>{
+	it('should not return dashboard if no user', done=>{
 		request(app)
 		.get('/dashboard')
 		.end((err, res) => {
+			should.exist(res);
+			res.status.should.be.equal(302);
+			done();
+		});
+	});
+
+	/*it('should return dashboard page' , done =>{
+
+	});*/
+});
+
+describe('GET /logout' , ()=>{
+	it('should disconnect user' , done=>{
+		request(app)
+		.get('/logout')
+		.end((err,res) => {
 			should.exist(res);
 			res.status.should.be.equal(200);
 			done();
