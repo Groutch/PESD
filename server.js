@@ -17,17 +17,17 @@ app.use(session({
 }));
 //Fonction anti-injection
 function secure(str) {
-        if (str == null) return '';
+    if (str == null) return '';
 
-        return String(str).
-            replace(/&/g, '&amp;').
-            replace(/</g, '&lt;').
-            replace(/>/g, '&gt;').
-            replace(/"/g, '&quot;').
-            replace(/'/g, '&#039;').
-            replace(/--/g, '&#151;').
-            replace(/;/g, '&#59;');
-    };
+    return String(str).
+    replace(/&/g, '&amp;').
+    replace(/</g, '&lt;').
+    replace(/>/g, '&gt;').
+    replace(/"/g, '&quot;').
+    replace(/'/g, '&#039;').
+    replace(/--/g, '&#151;').
+    replace(/;/g, '&#59;');
+};
 
 const bodyparser = require('body-parser');
 //Utilisation body parser pour les recuperer des inputs
@@ -112,7 +112,7 @@ app.get('/dashboard', (req, res) => {
         		if(err){
         			console.log(err);
         		}else {
-                    
+
         			res.render('dashboard_mediateur/index',{result:result, username:userdisp});
         		}
         	})
@@ -148,7 +148,7 @@ app.post('/modifyInfos', (req,res) =>{
         console.log(req.session.user);
         res.redirect("/dashboard");
     });
-     
+
 });
 
 app.get('/startPESD' , (req,res) => {
@@ -183,16 +183,16 @@ app.post('/candidat',(req,res)=>{
 app.get('/candidat/:id',(req,res)=>{
     let candidate = secure(req.params.id);
     let cand=`Select nom,prenom,mail,ville,DATE_FORMAT(naissance,'%d/%m/%Y') AS 'naissance' FROM Personne WHERE (nom = '${candidate}' OR prenom = '${candidate}') AND idRole = 2 ;`;
-       connection.query(cand,(err,result)=>{
+    connection.query(cand,(err,result)=>{
         if(err){
             console.log(err)
         }else if(req.session.user){
             if(req.session.user.idRole == 1){
                 userdisp = req.session.user.prenom;
-            res.render('dashboard_mediateur/index',{candidat:result, username:userdisp})
-        }else {
-            res.redirect('/dashboard');
-        }
+                res.render('dashboard_mediateur/index',{candidat:result, username:userdisp})
+            }else {
+                res.redirect('/dashboard');
+            }
         }else{
             res.redirect('/dashboard');
         }
@@ -237,6 +237,23 @@ app.get('/logout',(req,res)=>{
     req.session.destroy((err)=>{
         res.redirect('/');
     });
+});
+//Pour une prevision PESD
+app.get('/rdv',(req,res)=>{
+    if(req.session.user){
+        if(req.session.user.idRole == 1){
+            res.render('dashboard_mediateur/agenda',{username: req.session.user.prenom});
+        }else {
+            res.redirect('/')
+        }
+    }else{
+        res.redirect('/');
+    }
+});
+//verification prise de rendez-vous
+app.post('/rdv',(req,res)=>{
+    //req.body.candidat = option choisi , req.body.date = date choisi
+    res.redirect('/rdv');
 });
 
 //Lancement serveur pour app type heroku ou port 8080
