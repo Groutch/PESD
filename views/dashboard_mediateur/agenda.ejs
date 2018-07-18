@@ -1,1 +1,13 @@
-<h1>MON AGENDA</h1>
+<%include ../partials/head.ejs%>
+<%include ../partials/navbar.ejs%>
+<div class="container" id="rdv">
+	<h4><strong>Veuillez selectionner une date ainsi que le candidat de votre choix afin de programmer un PESD avec celui-ci :</strong></h4>
+</div>
+<div class="container">
+	<form method="POST" action='/rdv'>
+		<input type="date" name="date">
+		<select name="candidat"><option>test</option><option>test2</option></select>
+		<button type="submit" class="btn btn-primary">Valider la prise de rendez-vous</button>
+	</form>
+</div>
+<%include ../partials/footer.ejs%>
