@@ -202,6 +202,10 @@ app.get('/candidat/:id',(req,res)=>{
 app.post('/signin', (req, res) => {
     var mail = req.body.mail;
     var pass = req.body.pass;
+    let userdisp = '';
+    if (req.session.user) {
+        userdisp = req.session.user.prenom;
+    }
     var sqlLogin = "SELECT idPersonne, nom, prenom, mail, ville, pays, naissance, idRole, password FROM Personne WHERE `mail`='" + mail + "'";
     connection.query(sqlLogin, (err, result) => {
         if (result.length) {
@@ -215,17 +219,13 @@ app.post('/signin', (req, res) => {
                     console.log("mauvais password");
                     let message = 'Mot de passe incorrect';
                     res.render('forms/signin', {
-                        message: message
+                        message: message, username:userdisp
                     });
                 }
             });
         } else {
             console.log("mauvais login");
             let message = 'Login incorrect';
-            let userdisp = '';
-            if (req.session.user) {
-                userdisp = req.session.user.prenom;
-            }
             res.render('forms/signin', {
                 message: message, username:userdisp
             });
@@ -251,8 +251,8 @@ server = app.listen(PORT, (req, res) => {
 const io = require('socket.io')(server);
 
 io.on('connection' , socket => {
-    socket.on('answer' , data => {
-        socket.broadcast.emit('answer' , {answer : data.answer} );
+    socket.on('message' , data => {
+        socket.broadcast.emit('message' , {message : data.message} );
     });
 });
 
