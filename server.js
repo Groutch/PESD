@@ -6,6 +6,7 @@ const bcrypt = require('bcrypt');
 const connection = require('./connect');
 const session = require('express-session');
 const nodemailer = require('nodemailer');
+const $ = require('jquery');
 
 app.use(session({
     secret: 'keyboard cat',
@@ -107,7 +108,7 @@ app.get('/dashboard', (req, res) => {
     if (req.session.user) {
         let userdisp = req.session.user.prenom;
         if (req.session.user.idRole == 1) {
-        	let lst= "SELECT nom,prenom,DATE_FORMAT(date,'%d/%m/%Y %H:%i') AS 'date' FROM Personne,PESD WHERE Personne.idPersonne = PESD.idCandidat AND DATEDIFF(PESD.date,NOW())>=0 ORDER BY date;";
+        	let lst= "SELECT nom,prenom,DATE_FORMAT(date,'%d/%m/%Y %H:%i') AS 'date' FROM Personne,PESD WHERE Personne.idPersonne = PESD.idCandidat AND DATEDIFF(PESD.date,NOW())>=0 ORDER BY DATEDIFF(date,NOW());";
         	connection.query(lst,(err,result)=>{
         		if(err){
         			console.log(err);
@@ -245,22 +246,46 @@ app.get('/rdv',(req,res)=>{
         if (err){
             console.log(err)
         }else {
-            if(req.session.user){
-                if(req.session.user.idRole == 1){
-                    res.render('dashboard_mediateur/agenda',{username: req.session.user.prenom,list:result});
-                }else {
-                    res.redirect('/')
+            let verif=`SELECT Personne.nom,Personne.prenom,DATE_FORMAT(PESD.date,'%d/%m/%Y %H:%i') AS date FROM PESD,PERSONNE WHERE Personne.idPersonne=PESD.idCandidat AND DATEDIFF(date,NOW())>=0 ORDER BY DATEDIFF(date,NOW()) ;`;
+            connection.query(verif,(err,resultt)=>{
+                if(req.session.user){
+                    if(req.session.user.idRole == 1){
+                        res.render('dashboard_mediateur/agenda',{username: req.session.user.prenom,list:result,verif:resultt});
+                    }else {
+                        res.redirect('/')
+                    }
+                }else{
+                    res.redirect('/');
                 }
-            }else{
-                res.redirect('/');
-            }
-        }
-    })
+            })}
+        })
 });
 //verification prise de rendez-vous
 app.post('/rdv',(req,res)=>{
-    //req.body.candidat = option choisi , req.body.date = date choisi
-    res.redirect('/rdv');
+    if(req.body.date=="" || req.body.time==""){
+        let lst=`SELECT * FROM Personne WHERE idRole= 2;`
+        connection.query(lst,(err,result)=>{
+            if(err){
+                console.log(err)
+            }else{
+               res.render('dashboard_mediateur/agenda',{list:result,username: req.session.user.prenom,fail:req.session.user}); 
+           }
+       })
+    }else{
+        let mediateur=req.session.user.idPersonne;
+        let date=req.body.date+' '+req.body.time+':00';
+        date=secure(date);
+        let candidat=secure(req.body.candidat);
+    //req.body.candidat = option choisi , req.body.date = date choisi, req.body.time= heure
+    let rdv=`INSERT INTO PESD (date,idCandidat,idMediateur) VALUES ('${date}','${candidat}','${mediateur}')`;
+    connection.query(rdv,(err,result)=>{
+        if(err){
+            console.log(err)
+        }else {
+           res.redirect('/rdv'); 
+       }
+   })
+}
 });
 
 //Lancement serveur pour app type heroku ou port 8080
