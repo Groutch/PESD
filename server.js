@@ -240,15 +240,22 @@ app.get('/logout',(req,res)=>{
 });
 //Pour une prevision PESD
 app.get('/rdv',(req,res)=>{
-    if(req.session.user){
-        if(req.session.user.idRole == 1){
-            res.render('dashboard_mediateur/agenda',{username: req.session.user.prenom});
+    let lst=`SELECT * FROM Personne WHERE idRole = 2;`
+    connection.query(lst,(err,result)=>{
+        if (err){
+            console.log(err)
         }else {
-            res.redirect('/')
+            if(req.session.user){
+                if(req.session.user.idRole == 1){
+                    res.render('dashboard_mediateur/agenda',{username: req.session.user.prenom,list:result});
+                }else {
+                    res.redirect('/')
+                }
+            }else{
+                res.redirect('/');
+            }
         }
-    }else{
-        res.redirect('/');
-    }
+    })
 });
 //verification prise de rendez-vous
 app.post('/rdv',(req,res)=>{
