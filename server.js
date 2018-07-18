@@ -182,7 +182,7 @@ app.post('/candidat',(req,res)=>{
 })
 app.get('/candidat/:id',(req,res)=>{
     let candidate = secure(req.params.id);
-    let cand=`Select nom,prenom,mail,ville,DATE_FORMAT(naissance,'%d/%m/%Y') AS 'naissance' FROM Personne WHERE nom = '${candidate}' OR prenom = '${candidate}';`;
+    let cand=`Select nom,prenom,mail,ville,DATE_FORMAT(naissance,'%d/%m/%Y') AS 'naissance' FROM Personne WHERE (nom = '${candidate}' OR prenom = '${candidate}') AND idRole = 2 ;`;
        connection.query(cand,(err,result)=>{
         if(err){
             console.log(err)
