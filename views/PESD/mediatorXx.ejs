@@ -1,0 +1,29 @@
+<div class="container">	
+	<div class="row">
+		<div class="col-8">
+			<button class="btn btn-primary">O2</button>
+			<button class="btn btn-primary">O9</button>
+			<button class="btn btn-primary">O5</button>
+			<button class="btn btn-primary">O10</button>
+			<button class="btn btn-primary">O8</button>
+		</div>
+		<div class="col-4">
+			<h3>Histoire</h3>
+			<p><%= histoire%></p>
+		</div>
+	</div>
+	<div class="row">
+		<div class="col-8">
+				<div class="form-group">
+					<textarea style="width:100%;resize: none;" name="answer" id="answer" rows="10" placeholder="Entre tes réponses ici" disabled></textarea>
+				</div>
+		</div>
+		<div class="col-4">
+			<h3>Consigne</h3>
+			<p><%= consigne %></p>
+		</div>
+	</div>
+</div>
+<script>
+    var idP = "<%= userid %>";
+</script>
