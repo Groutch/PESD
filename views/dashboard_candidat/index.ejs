@@ -7,21 +7,36 @@
                     <%=user.nom %>
             </h1>
             <div class="row">
+                
                 <div class="col-md" id="agenda">
+                    <% var btactive = false; %>
+                    <% var date = moment().format('DD/MM/YYYY HH:mm');%>
+                    <% var dateplus10 = moment().add(10,"m").format('DD/MM/YYYY HH:mm'); %>
+                    <% var datemin10 = moment().subtract(10,"m").format('DD/MM/YYYY HH:mm'); %>
+                    <h5><%=datemin10%> - <%=dateplus10%></h5>
                     <h4>PESD à venir :</h4>
-                    <% futurPESD.forEach(function(PES) {%>
+                    <% listPESD.forEach(function(PES) {%>
+                        <%if (PES.date >= datemin10 && PES.date <= dateplus10) {%>
+                            <%btactive = btactive || true;%>
+                        <%}%>
+                        <%if (PES.date >= datemin10) {%>
                         <p>PESD du <%=PES.date%> <br/>
                             avec <%=PES.prenom%> <%=PES.nom%>
                         </p>
-                        <% }); %>
-                            <a href="/startPESD"><button class="btn btn-primary btn-lg" >Commencer PESD</button></a>
+                        <%}%>
+                    <% }); %>
+                    <% if (btactive) { %>
+                    <a href="/startPESD/"><button class="btn btn-primary btn-lg" >Commencer PESD</button></a>
+                    <% }%>    
                 </div>
                 <div class="col-md" id="PESDHistory">
                     <h4>Historique des PESD:</h4>
-                    <% histoPESD.forEach(function(PESD) {%>
+                    <% listPESD.forEach(function(PESD) {%>
+                        <% if (PESD.date < datemin10) { %>
                         <p><a href="/viewPESD<%=PESD.idPESD%>"> PESD du <%=PESD.date%> <br/> avec <%=PESD.prenom%> <%=PESD.nom%></a>
-                            <% }); %>
                         </p>
+                        <% } %>
+                    <% }); %>
                 </div>
                 <div class="col-md" id="account">
                     <h4>Info Utilisateur:</h4>
