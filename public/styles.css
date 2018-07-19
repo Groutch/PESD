@@ -4,7 +4,7 @@ nav {
 
 #panneau {
 	margin-top:50px;
-	margin-left:15%;
+	width:80%;
 	background-color:#F4F4F4FF;
 }
 
@@ -20,3 +20,18 @@ nav {
 #rdv {
 	margin-top:50px;
 }
+
+.test {
+	color:red;
+}
+
+
+.modal-dialog {
+  max-width: 80%;
+  height: 80% ;
+  padding: 0 ;
+  margin:0 auto ;
+ 
+}
+
+
