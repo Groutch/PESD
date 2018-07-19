@@ -240,6 +240,8 @@ app.post('/startPESD/:idpesd/:etape' , (req,res)=>{
             res.render('PESD/index', {
                 userid: req.session.user.idPersonne , consigne:consigne , histoire:histoire,etape:etape,idP:req.params.idpesd
             });
+        }else {
+            res.redirect('/');
         }
 });
 
