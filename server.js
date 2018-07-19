@@ -244,11 +244,9 @@ app.post('/startPESD/:idpesd/:etape' , (req,res)=>{
         break;
     }
     if (req.session.user.idRole == 1) {
-        res.render('PESD/index',{rankid: req.session.user.idRole ,userid:req.session.user.idPersonne, consigne:consigne , histoire:histoire,etape:etape, idP:req.params.idpesd});
+        res.render('PESD/index',{rankid: req.session.user.idRole,userid:req.session.user.idPersonne, consigne:consigne , histoire:histoire,etape:etape, idP:req.params.idpesd});
     } else if (req.session.user.idRole == 2) {
-        res.render('PESD/index', {
-            userid: req.session.user.idPersonne , consigne:consigne , histoire:histoire,etape:etape,idP:req.params.idpesd,rankid: req.session.user.idRole
-        });
+        res.render('PESD/index',{rankid: req.session.user.idRole,userid:req.session.user.idPersonne, consigne:consigne , histoire:histoire,etape:etape, idP:req.params.idpesd});
     }else {
         res.redirect('/');
     }
@@ -364,7 +362,7 @@ app.post('/rdv',(req,res)=>{
             if(err){
                 console.log(err)
             }else{
-               res.render('dashboard_mediateur/agenda',{list:result,username: req.session.user.prenom,fail:req.session.user}); 
+               res.render('dashboard_mediateur/agenda',{list:result,username: req.session.user.prenom,fail:req.session.user});
            }
        })
     }else{
@@ -378,7 +376,7 @@ app.post('/rdv',(req,res)=>{
         if(err){
             console.log(err)
         }else {
-           res.redirect('/rdv'); 
+           res.redirect('/rdv');
        }
    })
 }

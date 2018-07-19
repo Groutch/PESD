@@ -18,7 +18,7 @@
                             <%idPESD = PES.idPESD %>
                         <%}})%>
                         <%if(btactive){%>
-			<form action="/startpesd/<%=idPESD%>/<%=etape%>" method="POST">
+			<form action="/startpesd/<%=idPESD%>/A" method="POST">
 				<button type="submit" class="btn btn-danger btn-lg">Lancer le Test</button>
 			</form>
 		<%}%>
@@ -43,7 +43,7 @@
 	<p>
 		<%=element.nom +' '+ element.prenom +' '+element.date%>
 	</p>
-	<%})%> 
+	<%})%>
 	<%}%>
 	<%if (locals.candidat){%>
 	<h4><strong>Information du candidat recherché :</strong></h4>
