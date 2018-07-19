@@ -231,7 +231,7 @@ app.get('/startPESD/:idpesd/:etape' , (req,res)=>{
     }
     if (req.session.user.idRole == 1) {
 
-            res.render('PESD/index',{userid: req.session.user.idPersonne , consigne:consigne , histoire:histoire,etape:etape}) // à changer pour afficher le PESD du médiateur
+            res.render('PESD/index',{userid: req.session.user.idRole , consigne:consigne , histoire:histoire,etape:etape}) // à changer pour afficher le PESD du médiateur
         } else if (req.session.user.idRole == 2) {
             res.render('PESD/index', {
                 userid: req.session.user.idPersonne , consigne:consigne , histoire:histoire,etape:etape
