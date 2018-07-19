@@ -6,8 +6,31 @@
 <div class="container">
 	<form method="POST" action='/rdv'>
 		<input type="date" name="date">
-		<select name="candidat"><option>test</option><option>test2</option></select>
+		<input type="time" name="time" min="0" max="59">
+		<select name="candidat">
+			<%list.forEach(element=>{%>
+			<option value="<%=element.idPersonne%>">
+				<%= element.nom + ' ' + element.prenom%>
+			</option>
+			<%})%>
+		</select>
 		<button type="submit" class="btn btn-primary">Valider la prise de rendez-vous</button>
 	</form>
 </div>
+<div class="container" id="rdv" class="random">
+	<%if(locals.verif){%>
+	<table>
+		<%verif.forEach(element=>{%>
+		<tr>
+			<td><%=element.nom%></td>
+			<td><%=element.prenom%></td>
+			<td><%=element.date%></td>
+		</tr>
+		<%})%>
+	</table>
+	<%}%>
+</div>
+<%if(locals.fail){%>
+<div class="alert alert-danger col-sm-12">Un des champs est vide ! Pensez à tout remplir avant de cliquer sur le bouton envoi</div>
+<%}%>
 <%include ../partials/footer.ejs%>

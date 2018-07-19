@@ -1,5 +1,8 @@
 $(document).ready(() => {
-    var socket = io();
+    
+    if (typeof idP != 'undefined') {
+        var socket = io("/"+idP);
+        }
     $("#displayAccount").show();
     $("#formModifyAccount").hide();
     $("#askModInfos").click(() => {
@@ -8,11 +11,10 @@ $(document).ready(() => {
     });
     $("#answer").on("keyup", () => {
         var text = $("#answer").val().replace(/</g, "&lt;").replace(/>/g, "&gt;");
-        socket.emit("message", {
-            message: text
-        });
+        socket.emit("message", {message: text});
     });
-    socket.on("message", function (data) {
+    
+    socket.on("message", data =>{
         $("#answer").val(data.message);
     });
 });
