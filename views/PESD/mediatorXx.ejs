@@ -1,29 +1,34 @@
 <div class="container">	
 	<div class="row">
-		<div class="col-8">
-			<button class="btn btn-primary">O2</button>
-			<button class="btn btn-primary">O9</button>
-			<button class="btn btn-primary">O5</button>
-			<button class="btn btn-primary">O10</button>
-			<button class="btn btn-primary">O8</button>
+		<div class="col-6">
+			<img class="img-fluid" src=<% if(etape!='E' && etape!='D'){%>"/img/PESD.png"<%}else{%>"/img/black.png"<%}%> alt="">
 		</div>
-		<div class="col-4">
+		<div class="col-3 border border-dark rounded">
 			<h3>Histoire</h3>
 			<p><%= histoire%></p>
+			<button class="btn btn-primary">O2 : +1</button>
+			<button class="btn btn-primary">O5 : +1</button>
+			<button class="btn btn-primary">O8 : +1</button>
+			<button class="btn btn-primary">O9 : +1</button>
+			<button class="btn btn-primary">O10 : +1</button>
+		</div>
+		<div class="col-3 border border-dark rounded">
+			<h3>Consigne</h3>
+			<p><%= consigne %></p>
+			<form method="POST" action="/startpesd/<%= idP%>/<%=etape%>">
+				<button value="" type="submit">Etape suivante</button>
+			</form>
 		</div>
 	</div>
 	<div class="row">
-		<div class="col-8">
-				<div class="form-group">
-					<textarea style="width:100%;resize: none;" name="answer" id="answer" rows="10" placeholder="Entre tes réponses ici" disabled></textarea>
-				</div>
-		</div>
-		<div class="col-4">
-			<h3>Consigne</h3>
-			<p><%= consigne %></p>
+		<div class="col-12">
+			<div class="form-group mt-3">
+				<textarea class="form-control" style="width:100%;resize: none;" name="answer" id="answer" rows="10" placeholder="Entre tes réponses ici" disabled></textarea>
+			</div>
 		</div>
 	</div>
 </div>
+
 <script>
-    var idP = "<%= userid %>";
+	var idP = "<%= userid %>";
 </script>

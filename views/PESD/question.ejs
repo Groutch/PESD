@@ -1,30 +1,27 @@
 <div class="container">	
 	<div class="row">
-		<div class="col-8">
-			
-			<img class="img-fluid" src=<% if(etape!='E' && etape!='D'){%>"/img/PESD.png"<%}else{%>"/img/black.png"<%}%> alt="">
-
+		<div class="col-6">
+			<img id="aggrandir" class="img-fluid" src=<% if(etape!='E' && etape!='D'){%>"/img/PESD.png"<%}else{%>"/img/black.png"<%}%> data-zoom-image="/img/PESD.png" alt="">
 		</div>
-		<div class="col-4">
+		<div class="col-3 border border-dark rounded">
 			<h3>Histoire</h3>
 			<p><%=histoire%></p>
 		</div>
-	</div>
-	<div class="row">
-		<div class="col-8">
-			<form action="" method="POST">
-				<div class="form-group">
-					<textarea style="width:100%;resize: none;" name="answer" id="answer" rows="10" placeholder="Entre tes réponses ici"></textarea>
-				</div>
-				<input class="btn btn-primary" type="submit" id="sendtext" value="Envoyer">
-			</form>
-		</div>
-		<div class="col-4">
+		<div class="col-3 border border-dark rounded">
 			<h3>Consigne</h3>
 			<p><%=consigne%></p>
 		</div>
 	</div>
+	<div class="row">
+		<div class="col-12">
+			<form action="" method="POST">
+				<div class="form-group">
+					<textarea style="width:100%;resize: none;" name="answer" id="answer" rows="10" placeholder="Entre tes réponses ici"></textarea>
+				</div>
+			</form>
+		</div>
+	</div>
 </div>
 <script>
-    var idP = "<%= userid %>";
+	var idP = "<%= userid %>";
 </script>
