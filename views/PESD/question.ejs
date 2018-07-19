@@ -1,11 +1,13 @@
 <div class="container">	
 	<div class="row">
 		<div class="col-8">
-			<img class="img-fluid" src="/img/PESD.png" alt="">
+			
+			<img class="img-fluid" src=<% if(etape!='E' && etape!='D'){%>"/img/PESD.png"<%}else{%>"/img/black.png"<%}%> alt="">
+
 		</div>
 		<div class="col-4">
 			<h3>Histoire</h3>
-			<p></p>
+			<p><%=histoire%></p>
 		</div>
 	</div>
 	<div class="row">
@@ -19,7 +21,7 @@
 		</div>
 		<div class="col-4">
 			<h3>Consigne</h3>
-			<p></p>
+			<p><%=consigne%></p>
 		</div>
 	</div>
 </div>
