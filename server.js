@@ -6,6 +6,7 @@ const bcrypt = require('bcrypt');
 const connection = require('./connect');
 const session = require('express-session');
 const nodemailer = require('nodemailer');
+app.locals.moment = require('moment');
 //Lancement serveur pour app type heroku ou port 8080
 const PORT = process.env.PORT || 8080;
 server = app.listen(PORT, (req, res) => {
@@ -133,12 +134,12 @@ app.get('/dashboard', (req, res) => {
                 }
             })
         } else if (req.session.user.idRole == 2) {
-            let sqlListPESDCand = "SELECT PESD.idPESD, DATE_FORMAT(PESD.date,'%d/%m/%Y %H:%i') AS 'date', Personne.nom as nom,Personne.prenom as prenom FROM PESD, Personne WHERE PESD.idCandidat=" + req.session.user.idPersonne + " AND PESD.idMediateur = Personne.idPersonne AND DATEDIFF(PESD.date, NOW()) < 0; SELECT PESD.idPESD, DATE_FORMAT(PESD.date,'%d/%m/%Y %H:%i') AS 'date', Personne.nom as nom,Personne.prenom as prenom FROM PESD, Personne WHERE PESD.idCandidat=" + req.session.user.idPersonne + " AND PESD.idMediateur = Personne.idPersonne AND DATEDIFF(PESD.date, NOW()) >= 0;";
+            let sqlListPESDCand = "SELECT PESD.idPESD, DATE_FORMAT(PESD.date,'%d/%m/%Y %H:%i') AS 'date', Personne.nom as nom,Personne.prenom as prenom FROM PESD, Personne WHERE PESD.idCandidat=" + req.session.user.idPersonne + " AND PESD.idMediateur=Personne.idPersonne";
             connection.query(sqlListPESDCand, (err, result) => {
+                console.log(result);
                 res.render('dashboard_candidat/index', {
                     user: req.session.user,
-                    histoPESD: result[0],
-                    futurPESD: result[1],
+                    listPESD: result,
                     username: userdisp
                 });
             });
