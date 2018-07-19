@@ -15,9 +15,11 @@
                     <% var datemin10 = moment().subtract(10,"m").format('DD/MM/YYYY HH:mm'); %>
                     <h5><%=datemin10%> - <%=dateplus10%></h5>
                     <h4>PESD à venir :</h4>
+                    <%var idPESD = -1 %>
                     <% listPESD.forEach(function(PES) {%>
                         <%if (PES.date >= datemin10 && PES.date <= dateplus10) {%>
                             <%btactive = btactive || true;%>
+                            <%idPESD = PES.idPESD %>
                         <%}%>
                         <%if (PES.date >= datemin10) {%>
                         <p>PESD du <%=PES.date%> <br/>
@@ -26,7 +28,9 @@
                         <%}%>
                     <% }); %>
                     <% if (btactive) { %>
-                    <a href="/startPESD/"><button class="btn btn-primary btn-lg" >Commencer PESD</button></a>
+                    <form method="POST" action="/startPESD/<%=idPESD%>/A">
+                        <button class="btn btn-primary btn-lg" type="submit">Commencer PESD</button>
+                    </form>
                     <% }%>    
                 </div>
                 <div class="col-md" id="PESDHistory">

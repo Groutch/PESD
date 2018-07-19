@@ -10,7 +10,6 @@ app.locals.moment = require('moment');
 //Lancement serveur pour app type heroku ou port 8080
 const PORT = process.env.PORT || 8080;
 server = app.listen(PORT, (req, res) => {
-    console.log('Connected');
 });
 const io = require('socket.io')(server);
 
@@ -44,7 +43,7 @@ app.use(bodyparser.urlencoded({
 //Utilisation de ejs en template
 app.set('view engine', 'ejs');
 //Utilisation du css dans le dossier public
-app.use('/', express.static('public'));
+app.use(express.static('public'));
 app.use('/candidat', express.static('public'))
 //Page accueil du site
 app.get('/', (req, res) => {
@@ -81,9 +80,7 @@ app.post('/signup', (req, res) => {
         //si le mail pas trouvé dans la liste
         let message = '';
         let found = false;
-        console.log(req.body.Mail);
         for (var i = 0; i < result.length; i++) {
-            console.log(result[i].mail);
             if (result[i].mail == req.body.Mail) {
                 found = found || true;
             }
@@ -136,7 +133,6 @@ app.get('/dashboard', (req, res) => {
         } else if (req.session.user.idRole == 2) {
             let sqlListPESDCand = "SELECT PESD.idPESD, DATE_FORMAT(PESD.date,'%d/%m/%Y %H:%i') AS 'date', Personne.nom as nom,Personne.prenom as prenom FROM PESD, Personne WHERE PESD.idCandidat=" + req.session.user.idPersonne + " AND PESD.idMediateur=Personne.idPersonne";
             connection.query(sqlListPESDCand, (err, result) => {
-                console.log(result);
                 res.render('dashboard_candidat/index', {
                     user: req.session.user,
                     listPESD: result,
@@ -167,7 +163,6 @@ app.post('/modifyInfos', (req, res) => {
     let sqlUpdateUserInfo = "SELECT idPersonne, nom, prenom, mail, ville, pays, naissance, idRole, password FROM Personne WHERE idPersonne = " + req.session.user.idPersonne;
     connection.query(sqlUpdateUserInfo, (err, result) => {
         req.session.user = result[0];
-        console.log(req.session.user);
         res.redirect("/dashboard");
     });
 
@@ -194,7 +189,16 @@ app.get('/startPESD', (req, res) => {
 
 });
 
-app.get('/startPESD/:idpesd/:etape' , (req,res)=>{
+app.post('/startPESD/:idpesd/:etape' , (req,res)=>{
+    console.log("idPESD: "+req.params.idpesd+" | etape: "+req.params.etape)
+    // socket
+        io.of('/'+req.params.idpesd).on('connection', socket => {
+            socket.on('message', data => {
+                socket.broadcast.emit('message', {
+                    message: data.message
+                });
+            });
+        });
     let answer = secure(req.body.answer);
     let story = 'Paul et Marie sont en visite avec leur fille Caroline chez leurs cousins Jean et Anne qui ont deux enfants, Alice et Michel. Jean est assis dans son fauteuil et regarde ses deux enfants.';
     let etape = req.params.etape, consigne='',histoire='';
@@ -232,10 +236,10 @@ app.get('/startPESD/:idpesd/:etape' , (req,res)=>{
     }
     if (req.session.user.idRole == 1) {
 
-            res.render('PESD/index',{userid: req.session.user.idPersonne , consigne:consigne , histoire:histoire,etape:etape}) // à changer pour afficher le PESD du médiateur
+            res.render('PESD/index',{userid: req.session.user.idPersonne , consigne:consigne , histoire:histoire,etape:etape, idP:req.params.idpesd}) // à changer pour afficher le PESD du médiateur
         } else if (req.session.user.idRole == 2) {
             res.render('PESD/index', {
-                userid: req.session.user.idPersonne , consigne:consigne , histoire:histoire,etape:etape
+                userid: req.session.user.idPersonne , consigne:consigne , histoire:histoire,etape:etape,idP:req.params.idpesd
             });
         }
 });
@@ -294,11 +298,9 @@ app.post('/signin', (req, res) => {
             bcrypt.compare(pass, result[0].password, function (err, rescrypt) {
                 // rescrypt == true le mot de passe correspond
                 if (rescrypt) {
-                    console.log("bon password");
                     req.session.user = result[0];
                     res.redirect('/');
                 } else {
-                    console.log("mauvais password");
                     let message = 'Mot de passe incorrect';
                     res.render('forms/signin', {
                         message: message,
@@ -307,7 +309,6 @@ app.post('/signin', (req, res) => {
                 }
             });
         } else {
-            console.log("mauvais login");
             let message = 'Login incorrect';
             res.render('forms/signin', {
                 message: message,
