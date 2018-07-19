@@ -4,7 +4,7 @@ $(document).ready(() => {
         var socket = io("/" + idP);
         $("#answer").on("keyup", () => {
             var text = $("#answer").val().replace(/</g, "&lt;").replace(/>/g, "&gt;");
-            console.log(text);
+            
             socket.emit("message", {
                 message: text
             });

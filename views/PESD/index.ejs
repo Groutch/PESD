@@ -1,7 +1,9 @@
 <%- include ../partials/head.ejs %>
-<%if(userid==1){%>
+<%if (rankid){%>
+<%if(rankid==1){%>
 <%- include ./mediatorXx.ejs%>
 <%}else {%>
 <%- include ./question.ejs %>
+<%}%>
 <%}%>
 <%- include ../partials/footer.ejs%>
