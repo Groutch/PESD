@@ -126,10 +126,19 @@ app.get('/dashboard', (req, res) => {
         		if(err){
         			console.log(err);
         		}else {
-                    res.render('dashboard_mediateur/index', {
-                        result: result,
-                        username: userdisp
-                    });
+                    let sqlListPESDMed = "SELECT PESD.idPESD, DATE_FORMAT(PESD.date,'%d/%m/%Y %H:%i') AS 'date', Personne.nom as nom,Personne.prenom as prenom FROM PESD, Personne WHERE PESD.idMediateur=" + req.session.user.idPersonne + " AND PESD.idMediateur=Personne.idPersonne AND DATEDIFF(date,NOW())>=0 ORDER BY DATEDIFF(date,NOW());";
+                    connection.query(sqlListPESDMed,(err,resultt)=>{
+                        if(err){
+                            console.log(err)
+                        }else{
+                            console.log(resultt)
+                            res.render('dashboard_mediateur/index', {
+                                result: result,
+                                username: userdisp,
+                                listPESD: resultt,
+                                etape: "A",
+                            })}
+                        });
                 }
             })
         } else if (req.session.user.idRole == 2) {
@@ -192,15 +201,15 @@ app.get('/startPESD', (req, res) => {
 });
 
 app.post('/startPESD/:idpesd/:etape' , (req,res)=>{
-    console.log("idPESD: "+req.params.idpesd+" | etape: "+req.params.etape)
+    if(req.session.user){
     // socket
-        io.of('/'+req.params.idpesd).on('connection', socket => {
-            socket.on('message', data => {
-                socket.broadcast.emit('message', {
-                    message: data.message
-                });
+    io.of('/'+req.params.idpesd).on('connection', socket => {
+        socket.on('message', data => {
+            socket.broadcast.emit('message', {
+                message: data.message
             });
         });
+    });
     let answer = secure(req.body.answer);
     let story = 'Paul et Marie sont en visite avec leur fille Caroline chez leurs cousins Jean et Anne qui ont deux enfants, Alice et Michel. Jean est assis dans son fauteuil et regarde ses deux enfants.';
     let etape = req.params.etape, consigne='',histoire='';
@@ -208,41 +217,42 @@ app.post('/startPESD/:idpesd/:etape' , (req,res)=>{
     // connection + query
     switch (etape) {
         case 'A' : consigne = 'Quelle question pourrais-je te poser à propos de ce dessin?';
-                    break;
+        break;
 
         case 'B' : consigne = 'Intégralement ou avec tes mots , peux-tu écrire la question que je viens de te lire';
-                    histoire = story;
-                    break;
+        histoire = story;
+        break;
 
         case 'C1' : consigne = 'Identifie et trouve le nom des personnages numérotés de 1 à 7 et explique la raison de tes choix';
-                    histoire = story;
-                    break;
+        histoire = story;
+        break;
 
         case 'D' : consigne = 'Intégralement ou avec tes mots , peux-tu écrire la question que je t\'ai lue tout à l\'heure?';
-                    break;
+        break;
 
         case 'E' : consigne = 'Intégralement ou avec tes mots , peux-tu écrire l\'histoire que je t\'ai lue tout à l\'heure?';
-                    break;
+        break;
 
         case 'C2' : consigne = 'Continue ton Point C. Identifie et trouve le nom des personnages numérotés de 1 à 7 et explique la raison de tes choix';
-                    histoire = story;
-                    break;
+        histoire = story;
+        break;
 
         case 'F' : consigne = 'Ecris ce que tu vois ou observe sur ce dessin';
-                    histoire = story;
-                    break;
+        histoire = story;
+        break;
 
         case 'G' : consigne = 'Ecris ce qui se passe sur dessin';
-                    histoire = story;
-                    break;
+        histoire = story;
+        break;
     }
     if (req.session.user.idRole == 1) {
-            res.render('PESD/index',{userid: req.session.user.idPersonne , consigne:consigne , histoire:histoire,etape:etape, idP:req.params.idpesd});
-        } else if (req.session.user.idRole == 2) {
-            res.render('PESD/index', {
-                userid: req.session.user.idPersonne , consigne:consigne , histoire:histoire,etape:etape,idP:req.params.idpesd
-            });
-        }
+        res.render('PESD/index',{rankid: req.session.user.idRole,userid:req.session.user.idPersonne, consigne:consigne , histoire:histoire,etape:etape, idP:req.params.idpesd});
+    } else if (req.session.user.idRole == 2) {
+        res.render('PESD/index',{rankid: req.session.user.idRole,userid:req.session.user.idPersonne, consigne:consigne , histoire:histoire,etape:etape, idP:req.params.idpesd});
+    }else {
+        res.redirect('/');
+    }
+}else{res.redirect('/')}
 });
 
 //Page de connexion
@@ -262,7 +272,7 @@ app.post('/candidat', (req, res) => {
     if (candidat == '') {
         res.redirect('/dashboard')
     } else
-        res.redirect('/candidat/' + candidat + '');
+    res.redirect('/candidat/' + candidat + '');
 })
 app.get('/candidat/:id', (req, res) => {
     let candidate = secure(req.params.id);
@@ -354,7 +364,7 @@ app.post('/rdv',(req,res)=>{
             if(err){
                 console.log(err)
             }else{
-               res.render('dashboard_mediateur/agenda',{list:result,username: req.session.user.prenom,fail:req.session.user}); 
+               res.render('dashboard_mediateur/agenda',{list:result,username: req.session.user.prenom,fail:req.session.user});
            }
        })
     }else{
@@ -368,7 +378,7 @@ app.post('/rdv',(req,res)=>{
         if(err){
             console.log(err)
         }else {
-           res.redirect('/rdv'); 
+           res.redirect('/rdv');
        }
    })
 }

@@ -6,7 +6,22 @@
 			<a href="/rdv"><button class="btn btn-primary btn-lg">Prévoir un PESD</button></a>
 		</div>
 		<div class="col-sm">
-			<button class="btn btn-danger btn-lg">Lancer le Test</button>
+			<!-- Reussir a recuperer idP-->
+			<% var btactive = false; %>
+			<% var date = moment().format('DD/MM/YYYY HH:mm');%>
+			<% var dateplus10 = moment().add(10,"m").format('DD/MM/YYYY HH:mm'); %>
+			<% var datemin10 = moment().subtract(10,"m").format('DD/MM/YYYY HH:mm'); %>
+			<%var idPESD = -1 %>
+			<% listPESD.forEach(function(PES) {%>
+                        <%if (PES.date >= datemin10 && PES.date <= dateplus10) {%>
+                            <%btactive = btactive || true;%>
+                            <%idPESD = PES.idPESD %>
+                        <%}})%>
+                        <%if(btactive){%>
+			<form action="/startpesd/<%=idPESD%>/A" method="POST">
+				<button type="submit" class="btn btn-danger btn-lg">Lancer le Test</button>
+			</form>
+		<%}%>
 		</div>
 	</div>
 	<div class="row">
@@ -28,7 +43,7 @@
 	<p>
 		<%=element.nom +' '+ element.prenom +' '+element.date%>
 	</p>
-	<%})%> 
+	<%})%>
 	<%}%>
 	<%if (locals.candidat){%>
 	<h4><strong>Information du candidat recherché :</strong></h4>

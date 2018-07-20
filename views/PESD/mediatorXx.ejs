@@ -1,4 +1,4 @@
-<div class="container">	
+<div class="container">
 	<div class="row">
 		<div class="col-6">
 			<img class="img-fluid" src=<% if(etape!='E' && etape!='D'){%>"/img/PESD.png"<%}else{%>"/img/black.png"<%}%> alt="">
@@ -7,7 +7,7 @@
 			<h3>Histoire</h3>
 			<p><%= histoire%></p>
 			<button class="btn btn-primary">O2 : +1</button>
-			<button class="btn btn-primary">O5 : +1</button>
+			<button class="btn btn-primary">O5: +1</button>
 			<button class="btn btn-primary">O8 : +1</button>
 			<button class="btn btn-primary">O9 : +1</button>
 			<button class="btn btn-primary">O10 : +1</button>
@@ -23,12 +23,12 @@
 	<div class="row">
 		<div class="col-12">
 			<div class="form-group mt-3">
-				<textarea class="form-control" style="width:100%;resize: none;" name="answer" id="answer" rows="10" placeholder="Entre tes réponses ici" disabled></textarea>
+				<div class="form-control" style="width:100%;resize: none;" name="answerM" id="answerM" ></div>
 			</div>
 		</div>
 	</div>
 </div>
 
 <script>
-	var idP = "<%= userid %>";
+	var idP = "<%= idP %>";
 </script>
