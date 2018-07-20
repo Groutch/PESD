@@ -13,6 +13,8 @@ server = app.listen(PORT, (req, res) => {
 });
 const io = require('socket.io')(server);
 
+const {checkStep} = require('./utils/utils.js');
+
 app.use(session({
     secret: 'keyboard cat',
     resave: false,
