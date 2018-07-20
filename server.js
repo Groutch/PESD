@@ -215,13 +215,12 @@ app.post('/startPESD/:idpesd/:etape' , (req,res)=>{
     let sqlAnswer = `INSERT INTO Reponse (idPESD,numReponse,reponse) VALUES ('${req.params.idpesd}','${etape}','${answer}');`;
     // connection + query
     
-    checkStep(etape);
-
-
+    let dataStep = checkStep(etape);
+    
     if (req.session.user.idRole == 1) {
-        res.render('PESD/index',{rankid: req.session.user.idRole,userid:req.session.user.idPersonne, consigne:consigne , histoire:histoire,etape:etape, idP:req.params.idpesd});
+        res.render('PESD/index',{rankid: req.session.user.idRole,userid:req.session.user.idPersonne, consigne:dataStep[1] , histoire:dataStep[0],etape:etape, idP:req.params.idpesd});
     } else if (req.session.user.idRole == 2) {
-        res.render('PESD/index',{rankid: req.session.user.idRole,userid:req.session.user.idPersonne, consigne:consigne , histoire:histoire,etape:etape, idP:req.params.idpesd});
+        res.render('PESD/index',{rankid: req.session.user.idRole,userid:req.session.user.idPersonne, consigne:dataStep[1] , histoire:dataStep[0],etape:etape, idP:req.params.idpesd});
     }else {
         res.redirect('/');
     }
