@@ -211,40 +211,13 @@ app.post('/startPESD/:idpesd/:etape' , (req,res)=>{
         });
     });
     let answer = secure(req.body.answer);
-    let story = 'Paul et Marie sont en visite avec leur fille Caroline chez leurs cousins Jean et Anne qui ont deux enfants, Alice et Michel. Jean est assis dans son fauteuil et regarde ses deux enfants.';
-    let etape = req.params.etape, consigne='',histoire='';
+    let etape = req.params.etape
     let sqlAnswer = `INSERT INTO Reponse (idPESD,numReponse,reponse) VALUES ('${req.params.idpesd}','${etape}','${answer}');`;
     // connection + query
-    switch (etape) {
-        case 'A' : consigne = 'Quelle question pourrais-je te poser à propos de ce dessin?';
-        break;
+    
+    checkStep(etape);
 
-        case 'B' : consigne = 'Intégralement ou avec tes mots , peux-tu écrire la question que je viens de te lire';
-        histoire = story;
-        break;
 
-        case 'C1' : consigne = 'Identifie et trouve le nom des personnages numérotés de 1 à 7 et explique la raison de tes choix';
-        histoire = story;
-        break;
-
-        case 'D' : consigne = 'Intégralement ou avec tes mots , peux-tu écrire la question que je t\'ai lue tout à l\'heure?';
-        break;
-
-        case 'E' : consigne = 'Intégralement ou avec tes mots , peux-tu écrire l\'histoire que je t\'ai lue tout à l\'heure?';
-        break;
-
-        case 'C2' : consigne = 'Continue ton Point C. Identifie et trouve le nom des personnages numérotés de 1 à 7 et explique la raison de tes choix';
-        histoire = story;
-        break;
-
-        case 'F' : consigne = 'Ecris ce que tu vois ou observe sur ce dessin';
-        histoire = story;
-        break;
-
-        case 'G' : consigne = 'Ecris ce qui se passe sur dessin';
-        histoire = story;
-        break;
-    }
     if (req.session.user.idRole == 1) {
         res.render('PESD/index',{rankid: req.session.user.idRole,userid:req.session.user.idPersonne, consigne:consigne , histoire:histoire,etape:etape, idP:req.params.idpesd});
     } else if (req.session.user.idRole == 2) {

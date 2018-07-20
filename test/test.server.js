@@ -81,7 +81,7 @@ describe('GET /dashboard' , ()=>{
 	});*/
 });
 
-describe('GET /logout' , ()=>{
+/*describe('GET /logout' , ()=>{
 	it('should disconnect user' , done=>{
 		request(app)
 		.get('/logout')
@@ -91,7 +91,7 @@ describe('GET /logout' , ()=>{
 			done();
 		});
 	});
-});
+}); */
 
 
 
