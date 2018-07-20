@@ -311,6 +311,7 @@ app.get('/logout', (req, res) => {
 
 app.get('/rdv',(req,res)=>{
     let lst=`SELECT * FROM Personne WHERE idRole = 2;`
+    if(req.session.user){
     connection.query(lst,(err,result)=>{
         if (err){
             console.log(err)
@@ -328,9 +329,11 @@ app.get('/rdv',(req,res)=>{
                 }
             })}
         })
+}else{res.redirect('/')}
 });
 //verification prise de rendez-vous
 app.post('/rdv',(req,res)=>{
+    if(req.session.user){
     if(req.body.date=="" || req.body.time==""){
         let lst=`SELECT * FROM Personne WHERE idRole= 2;`
         connection.query(lst,(err,result)=>{
@@ -354,7 +357,7 @@ app.post('/rdv',(req,res)=>{
            res.redirect('/rdv');
        }
    })
-}
+}}else{res.redirect('/')}
 });
 
 module.exports = app;
