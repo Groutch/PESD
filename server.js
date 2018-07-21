@@ -200,7 +200,7 @@ app.get('/startPESD', (req, res) => {
 
 });
 
-app.post('/startPESD/:idpesd/:etape' , (req,res)=>{
+app.post('/startPESD/:idpesd/:random' , (req,res)=>{
     if(req.session.user){
     // socket
     io.of('/'+req.params.idpesd).on('connection', socket => {
@@ -211,16 +211,16 @@ app.post('/startPESD/:idpesd/:etape' , (req,res)=>{
         });
     });
     let answer = secure(req.body.answer);
-    let etape = req.params.etape
+    let etape = req.body.etape;
     let sqlAnswer = `INSERT INTO Reponse (idPESD,numReponse,reponse) VALUES ('${req.params.idpesd}','${etape}','${answer}');`;
     // connection + query
     
     let dataStep = checkStep(etape);
     
     if (req.session.user.idRole == 1) {
-        res.render('PESD/index',{rankid: req.session.user.idRole,userid:req.session.user.idPersonne, consigne:dataStep[1] , histoire:dataStep[0],etape:etape, idP:req.params.idpesd});
+        res.render('PESD/index',{rankid: req.session.user.idRole,userid:req.session.user.idPersonne, consigne:dataStep[1] , histoire:dataStep[0],etape:dataStep[2], idP:req.params.idpesd});
     } else if (req.session.user.idRole == 2) {
-        res.render('PESD/index',{rankid: req.session.user.idRole,userid:req.session.user.idPersonne, consigne:dataStep[1] , histoire:dataStep[0],etape:etape, idP:req.params.idpesd});
+        res.render('PESD/index',{rankid: req.session.user.idRole,userid:req.session.user.idPersonne, consigne:dataStep[1] , histoire:dataStep[0],etape:dataStep[2], idP:req.params.idpesd});
     }else {
         res.redirect('/');
     }
