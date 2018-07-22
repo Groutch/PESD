@@ -180,29 +180,30 @@ app.post('/modifyInfos', (req, res) => {
 });
 
 app.get('/startPESD', (req, res) => {
-    if (req.session.user) {
-        // socket
-        io.of('/'+req.session.user.idPersonne).on('connection', socket => {
-            socket.on('message', data => {
-                socket.broadcast.emit('message', {
-                    message: data.message
-                });
-            });
-        });
-        if (req.session.user.idRole == 1) {
-            res.render('PESD/index',{userid: req.session.user.idPersonne}) // à changer pour afficher le PESD du médiateur
-        } else if (req.session.user.idRole == 2) {
-            res.render('PESD/index',{userid: req.session.user.idPersonne});
-        }
-    } else res.redirect('/');
-
+    // if (req.session.user && ) {
+    //     // socket
+    //     io.of('/'+req.session.user.idPersonne).on('connection', socket => {
+    //         socket.on('message', data => {
+    //             socket.broadcast.emit('message', {
+    //                 message: data.message
+    //             });
+    //         });
+    //     });
+    //     if (req.session.user.idRole == 1) {
+    //         res.render('PESD/index',{userid: req.session.user.idPersonne}) // à changer pour afficher le PESD du médiateur
+    //     } else if (req.session.user.idRole == 2) {
+    //         res.render('PESD/index',{userid: req.session.user.idPersonne});
+    //     }
+    // } else res.redirect('/');
+    res.redirect('/');
 });
 
 app.post('/startPESD' , (req,res)=>{
-    if(req.session.user){
+    if(req.session.user && req.body.etape && req.body.id){
       let answer = secure(req.body.answer);
       let etape = req.body.etape;
       let idpesd = req.body.id;
+
     // socket
     io.of('/'+idpesd).on('connection', socket => {
         socket.on('message', data => {
@@ -211,10 +212,13 @@ app.post('/startPESD' , (req,res)=>{
             });
         });
     });
-
+    //si on est pas a debut on peut envoyer la réponse
+    if (etape != "debut"){
     let sqlAnswer = `INSERT INTO Reponse (idPESD,numReponse,reponse) VALUES ('${idpesd}','${etape}','${answer}');`;
     // connection + query
+    }
 
+    console.log (sqlAnswer);
     let dataStep = checkStep(etape);
 
     if (req.session.user.idRole == 1) {
