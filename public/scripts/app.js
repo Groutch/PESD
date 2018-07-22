@@ -9,10 +9,17 @@ $(document).ready(() => {
             });
         });
 
+        $("#nextstep").on("click", () => {
+            socket.emit("nextstep");
+        });
+        socket.on('nextstep', ()=>{
+          $("#nextstepcli").click();
+        });
         socket.on("message", data => {
             $("#answer").val(data.message);
             $("#answerM").html(data.message);
         });
+
     }else{
       console.log("pas de idP pour le socket");
     }

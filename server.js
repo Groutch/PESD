@@ -9,11 +9,12 @@ const nodemailer = require('nodemailer');
 app.locals.moment = require('moment');
 //Lancement serveur pour app type heroku ou port 8080
 const PORT = process.env.PORT || 8080;
-server = app.listen(PORT, (req, res) => {
-});
+server = app.listen(PORT, (req, res) => {});
 const io = require('socket.io')(server);
 
-const {checkStep} = require('./utils/utils.js');
+const {
+    checkStep
+} = require('./utils/utils.js');
 
 app.use(session({
     secret: 'keyboard cat',
@@ -107,10 +108,7 @@ app.post('/signup', (req, res) => {
                 userdisp = req.session.user.prenom;
             }
             message = 'Le mail existe déjà';
-            res.render('forms/signup', {
-                message: message,
-                username: userdisp
-            });
+            res.render('forms/signup', {message: message, username: userdisp});
         }
     });
 });
@@ -121,24 +119,25 @@ app.get('/dashboard', (req, res) => {
     if (req.session.user) {
         let userdisp = req.session.user.prenom;
         if (req.session.user.idRole == 1) {
-        	let lst= "SELECT nom,prenom,DATE_FORMAT(date,'%d/%m/%Y %H:%i') AS 'date' FROM Personne,PESD WHERE Personne.idPersonne = PESD.idCandidat AND DATEDIFF(PESD.date,NOW())>=0 ORDER BY DATEDIFF(date,NOW());";
-        	connection.query(lst,(err,result)=>{
-        		if(err){
-        			console.log(err);
-        		}else {
+            let lst = "SELECT nom,prenom,DATE_FORMAT(date,'%d/%m/%Y %H:%i') AS 'date' FROM Personne,PESD WHERE Personne.idPersonne = PESD.idCandidat AND DATEDIFF(PESD.date,NOW())>=0 ORDER BY DATEDIFF(date,NOW());";
+            connection.query(lst, (err, result) => {
+                if (err) {
+                    console.log(err);
+                } else {
                     let sqlListPESDMed = "SELECT PESD.idPESD, DATE_FORMAT(PESD.date,'%d/%m/%Y %H:%i') AS 'date', Personne.nom as nom,Personne.prenom as prenom FROM PESD, Personne WHERE PESD.idMediateur=" + req.session.user.idPersonne + " AND PESD.idMediateur=Personne.idPersonne AND DATEDIFF(date,NOW())>=0 ORDER BY DATEDIFF(date,NOW());";
-                    connection.query(sqlListPESDMed,(err,resultt)=>{
-                        if(err){
+                    connection.query(sqlListPESDMed, (err, resultt) => {
+                        if (err) {
                             console.log(err)
-                        }else{
+                        } else {
                             //console.log(resultt)
                             res.render('dashboard_mediateur/index', {
                                 result: result,
                                 username: userdisp,
                                 listPESD: resultt,
                                 etape: "A",
-                            })}
-                        });
+                            })
+                        }
+                    });
                 }
             })
         } else if (req.session.user.idRole == 2) {
@@ -198,37 +197,44 @@ app.get('/startPESD', (req, res) => {
     res.redirect('/');
 });
 
-app.post('/startPESD' , (req,res)=>{
-    if(req.session.user && req.body.etape && req.body.id){
-      let answer = secure(req.body.answer);
-      let etape = req.body.etape;
-      let idpesd = req.body.id;
+app.post('/startPESD', (req, res) => {
+    if (req.session.user && req.body.etape && req.body.id) {
+        let answer = secure(req.body.answer);
+        let etape = req.body.etape;
+        let idpesd = req.body.id;
 
-    // socket
-    io.of('/'+idpesd).on('connection', socket => {
-        socket.on('message', data => {
-            socket.broadcast.emit('message', {
-                message: data.message
+        // socket
+        io.of('/' + idpesd).on('connection', socket => {
+            socket.on('message', data => {
+                socket.broadcast.emit('message', {
+                    message: data.message
+                });
+            });
+            socket.on('nextstep', () => {
+                socket.broadcast.emit('nextstep');
             });
         });
-    });
-    //si on est pas a debut on peut envoyer la réponse
-    if (etape != "debut"){
-    let sqlAnswer = `INSERT INTO Reponse (idPESD,numReponse,reponse) VALUES ('${idpesd}','${etape}','${answer}');`;
-    // connection + query
+        //si on est pas a debut ret que c'est le mediateur qui envoie
+        //on peut envoyer la réponse dans la bdd
+        if (etape != "debut" && req.session.user.idRole == 2) {
+            let sqlAnswer = `INSERT INTO Reponse (idPESD,numReponse,reponse) VALUES ('${idpesd}','${etape}',"${answer}");`;
+            console.log(sqlAnswer);
+            // connection + query
+            connection.query(sqlAnswer, (err) => {
+                if (err) {
+                    console.log(err);
+                }
+            });
+        }
+        let dataStep = checkStep(etape);
+        if (etape != "F") {
+            res.render('PESD/index', {rankid: req.session.user.idRole, userid: req.session.user.idPersonne, consigne: dataStep[1], histoire: dataStep[0], etape: dataStep[2], idP: idpesd});
+        } else {
+            res.redirect('/');
+        }
+    } else {
+        res.redirect('/')
     }
-
-    console.log (sqlAnswer);
-    let dataStep = checkStep(etape);
-
-    if (req.session.user.idRole == 1) {
-        res.render('PESD/index',{rankid: req.session.user.idRole,userid:req.session.user.idPersonne, consigne:dataStep[1] , histoire:dataStep[0],etape:dataStep[2], idP:idpesd});
-    } else if (req.session.user.idRole == 2) {
-        res.render('PESD/index',{rankid: req.session.user.idRole,userid:req.session.user.idPersonne, consigne:dataStep[1] , histoire:dataStep[0],etape:dataStep[2], idP:idpesd});
-    }else {
-        res.redirect('/');
-    }
-}else{res.redirect('/')}
 });
 
 //Page de connexion
@@ -248,7 +254,7 @@ app.post('/candidat', (req, res) => {
     if (candidat == '') {
         res.redirect('/dashboard')
     } else
-    res.redirect('/candidat/' + candidat + '');
+        res.redirect('/candidat/' + candidat + '');
 })
 app.get('/candidat/:id', (req, res) => {
     let candidate = secure(req.params.id);
@@ -312,55 +318,75 @@ app.get('/logout', (req, res) => {
 });
 //Pour une prevision PESD
 
-app.get('/rdv',(req,res)=>{
-    let lst=`SELECT * FROM Personne WHERE idRole = 2;`
-    if(req.session.user){
-    connection.query(lst,(err,result)=>{
-        if (err){
-            console.log(err)
-        }else {
-            let verif=`SELECT Personne.nom,Personne.prenom,DATE_FORMAT(PESD.date,'%d/%m/%Y %H:%i') AS date FROM PESD,PERSONNE WHERE Personne.idPersonne=PESD.idCandidat AND DATEDIFF(date,NOW())>=0 ORDER BY DATEDIFF(date,NOW()) ;`;
-            connection.query(verif,(err,resultt)=>{
-                if(req.session.user){
-                    if(req.session.user.idRole == 1){
-                        res.render('dashboard_mediateur/agenda',{username: req.session.user.prenom,list:result,verif:resultt});
-                    }else {
-                        res.redirect('/')
+app.get('/rdv', (req, res) => {
+    let lst = `SELECT * FROM Personne WHERE idRole = 2;`
+    if (req.session.user) {
+        connection.query(lst, (err, result) => {
+            if (err) {
+                console.log(err)
+            } else {
+                let verif = `SELECT Personne.nom,Personne.prenom,DATE_FORMAT(PESD.date,'%d/%m/%Y %H:%i') AS date FROM PESD,PERSONNE WHERE Personne.idPersonne=PESD.idCandidat AND DATEDIFF(date,NOW())>=0 ORDER BY DATEDIFF(date,NOW()) ;`;
+                connection.query(verif, (err, resultt) => {
+                    if (req.session.user) {
+                        if (req.session.user.idRole == 1) {
+                            res.render('dashboard_mediateur/agenda', {
+                                username: req.session.user.prenom,
+                                list: result,
+                                verif: resultt
+                            });
+                        } else {
+                            res.redirect('/')
+                        }
+                    } else {
+                        res.redirect('/');
                     }
-                }else{
-                    res.redirect('/');
-                }
-            })}
+                })
+            }
         })
-}else{res.redirect('/')}
+    } else {
+        res.redirect('/')
+    }
 });
 //verification prise de rendez-vous
-app.post('/rdv',(req,res)=>{
-    if(req.session.user){
-    if(req.body.date=="" || req.body.time==""){
-        let lst=`SELECT * FROM Personne WHERE idRole= 2;`
-        connection.query(lst,(err,result)=>{
-            if(err){
-                console.log(err)
-            }else{
-               res.render('dashboard_mediateur/agenda',{list:result,username: req.session.user.prenom,fail:req.session.user});
-           }
-       })
-    }else{
-        let mediateur=req.session.user.idPersonne;
-        let date=req.body.date+' '+req.body.time+':00';
-        date=secure(date);
-        let candidat=secure(req.body.candidat);
-    //req.body.candidat = option choisi , req.body.date = date choisi, req.body.time= heure
-    let rdv=`INSERT INTO PESD (date,idCandidat,idMediateur) VALUES ('${date}','${candidat}','${mediateur}')`;
-    connection.query(rdv,(err,result)=>{
-        if(err){
-            console.log(err)
-        }else {
-           res.redirect('/rdv');
-       }
-   })
-}}else{res.redirect('/')}
+app.post('/rdv', (req, res) => {
+    if (req.session.user) {
+        if (req.body.date == "" || req.body.time == "") {
+            let lst = `SELECT * FROM Personne WHERE idRole= 2;`
+            connection.query(lst, (err, result) => {
+                if (err) {
+                    console.log(err)
+                } else {
+                    res.render('dashboard_mediateur/agenda', {
+                        list: result,
+                        username: req.session.user.prenom,
+                        fail: req.session.user
+                    });
+                }
+            })
+        } else {
+            let mediateur = req.session.user.idPersonne;
+            let date = req.body.date + ' ' + req.body.time + ':00';
+            date = secure(date);
+            let candidat = secure(req.body.candidat);
+            //req.body.candidat = option choisi , req.body.date = date choisi, req.body.time= heure
+            let rdv = `INSERT INTO PESD (date,idCandidat,idMediateur) VALUES ('${date}','${candidat}','${mediateur}')`;
+            connection.query(rdv, (err, result) => {
+                if (err) {
+                    console.log(err)
+                } else {
+                    res.redirect('/rdv');
+                }
+            })
+        }
+    } else {
+        res.redirect('/')
+    }
 });
+
+//bout de code pour revenir a l'accueil quel que soit ce qu'on ajoute à l'adresse
+app.get('*', function (req, res) {
+    res.redirect('/');
+});
+
 
 module.exports = app;
