@@ -7,7 +7,7 @@
                     <%=user.nom %>
             </h1>
             <div class="row">
-                
+
                 <div class="col-md" id="agenda">
                     <% var btactive = false; %>
                     <% var date = moment().format('DD/MM/YYYY HH:mm');%>
@@ -28,10 +28,12 @@
                         <%}%>
                     <% }); %>
                     <% if (btactive) { %>
-                    <form method="POST" action="/startPESD/<%=idPESD%>/A">
+                    <form method="POST" action="/startPESD">
+                      <input hidden type="text" value="<%=idPESD%>" name="id">
+                      <input hidden type="text" value="A" name="etape">
                         <button class="btn btn-primary btn-lg" type="submit">Commencer PESD</button>
                     </form>
-                    <% }%>    
+                    <% }%>
                 </div>
                 <div class="col-md" id="PESDHistory">
                     <h4>Historique des PESD:</h4>

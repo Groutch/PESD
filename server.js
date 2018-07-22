@@ -131,7 +131,7 @@ app.get('/dashboard', (req, res) => {
                         if(err){
                             console.log(err)
                         }else{
-                            console.log(resultt)
+                            //console.log(resultt)
                             res.render('dashboard_mediateur/index', {
                                 result: result,
                                 username: userdisp,
@@ -192,35 +192,35 @@ app.get('/startPESD', (req, res) => {
         if (req.session.user.idRole == 1) {
             res.render('PESD/index',{userid: req.session.user.idPersonne}) // à changer pour afficher le PESD du médiateur
         } else if (req.session.user.idRole == 2) {
-            res.render('PESD/index', {
-                userid: req.session.user.idPersonne
-            });
+            res.render('PESD/index',{userid: req.session.user.idPersonne});
         }
     } else res.redirect('/');
 
 });
 
-app.post('/startPESD/:idpesd/:random' , (req,res)=>{
+app.post('/startPESD' , (req,res)=>{
     if(req.session.user){
+      let answer = secure(req.body.answer);
+      let etape = req.body.etape;
+      let idpesd = req.body.id;
     // socket
-    io.of('/'+req.params.idpesd).on('connection', socket => {
+    io.of('/'+idpesd).on('connection', socket => {
         socket.on('message', data => {
             socket.broadcast.emit('message', {
                 message: data.message
             });
         });
     });
-    let answer = secure(req.body.answer);
-    let etape = req.body.etape;
-    let sqlAnswer = `INSERT INTO Reponse (idPESD,numReponse,reponse) VALUES ('${req.params.idpesd}','${etape}','${answer}');`;
+
+    let sqlAnswer = `INSERT INTO Reponse (idPESD,numReponse,reponse) VALUES ('${idpesd}','${etape}','${answer}');`;
     // connection + query
-    
+
     let dataStep = checkStep(etape);
-    
+
     if (req.session.user.idRole == 1) {
-        res.render('PESD/index',{rankid: req.session.user.idRole,userid:req.session.user.idPersonne, consigne:dataStep[1] , histoire:dataStep[0],etape:dataStep[2], idP:req.params.idpesd});
+        res.render('PESD/index',{rankid: req.session.user.idRole,userid:req.session.user.idPersonne, consigne:dataStep[1] , histoire:dataStep[0],etape:dataStep[2], idP:idpesd});
     } else if (req.session.user.idRole == 2) {
-        res.render('PESD/index',{rankid: req.session.user.idRole,userid:req.session.user.idPersonne, consigne:dataStep[1] , histoire:dataStep[0],etape:dataStep[2], idP:req.params.idpesd});
+        res.render('PESD/index',{rankid: req.session.user.idRole,userid:req.session.user.idPersonne, consigne:dataStep[1] , histoire:dataStep[0],etape:dataStep[2], idP:idpesd});
     }else {
         res.redirect('/');
     }

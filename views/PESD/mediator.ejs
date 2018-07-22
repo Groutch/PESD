@@ -15,7 +15,7 @@
 		<div class="col-3 border border-dark rounded">
 			<h3>Consigne</h3>
 			<p><%= consigne %></p>
-			<form action="/startpesd/<%=idP%>/<%=etape%>" method="POST">
+			<form action="/startpesd" method="POST">
 				<input hidden type="text" value="<%=idP%>" name="id">
 				<input hidden type="text" value="<%=etape%>" name="etape">
 				<button class="btn btn-primary" type="submit">Etape suivante</button>

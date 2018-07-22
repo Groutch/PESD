@@ -4,7 +4,6 @@ $(document).ready(() => {
         var socket = io("/" + idP);
         $("#answer").on("keyup", () => {
             var text = $("#answer").val().replace(/</g, "&lt;").replace(/>/g, "&gt;").replace(/(?:\r\n|\r|\n)/g, '<br>');
-
             socket.emit("message", {
                 message: text
             });
@@ -14,6 +13,8 @@ $(document).ready(() => {
             $("#answer").val(data.message);
             $("#answerM").html(data.message);
         });
+    }else{
+      console.log("pas de idP pour le socket");
     }
     $("#displayAccount").show();
     $("#formModifyAccount").hide();
