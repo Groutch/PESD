@@ -10,11 +10,11 @@
 
                 <div class="col-md" id="agenda">
                     <% var btactive = false; %>
-                    <% var date = moment().format('DD/MM/YYYY HH:mm');%>
-                    <% var dateplus10 = moment().add(10,"m").format('DD/MM/YYYY HH:mm'); %>
-                    <% var datemin10 = moment().subtract(10,"m").format('DD/MM/YYYY HH:mm'); %>
+                    <% var date = moment().tz("Europe/Paris").format('DD/MM/YYYY HH:mm');%>
+                    <% var dateplus10 = moment().tz("Europe/Paris").add(10,"m").format('DD/MM/YYYY HH:mm'); %>
+                    <% var datemin10 = moment().tz("Europe/Paris").subtract(10,"m").format('DD/MM/YYYY HH:mm'); %>
                     <h5><%=datemin10%> - <%=dateplus10%></h5>
-                    <h4>PESD à venir :</h4>
+                    <h4>PESD du Jour :</h4>
                     <%var idPESD = -1 %>
                     <% listPESD.forEach(function(PES) {%>
                         <%if (PES.date >= datemin10 && PES.date <= dateplus10) {%>

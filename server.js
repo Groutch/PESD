@@ -6,7 +6,7 @@ const bcrypt = require('bcrypt');
 const connection = require('./connect');
 const session = require('express-session');
 const nodemailer = require('nodemailer');
-app.locals.moment = require('moment');
+app.locals.moment = require('moment-timezone');
 //Lancement serveur pour app type heroku ou port 8080
 const PORT = process.env.PORT || 8080;
 server = app.listen(PORT, (req, res) => {});
