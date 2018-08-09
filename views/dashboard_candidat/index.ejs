@@ -21,7 +21,7 @@
                             <%btactive = btactive || true;%>
                             <%idPESD = PES.idPESD %>
                         <%}%>
-                        <%if (PES.date >= datemin10) {%>
+                        <%if (PES.date < dateplus10) {%>
                         <p>PESD du <%=PES.date%> <br/>
                             avec <%=PES.prenom%> <%=PES.nom%>
                         </p>
@@ -38,7 +38,7 @@
                 <div class="col-md" id="PESDHistory">
                     <h4>Historique des PESD:</h4>
                     <% listPESD.forEach(function(PESD) {%>
-                        <% if (PESD.date < datemin10) { %>
+                        <% if (PESD.date >= datemin10) { %>
                         <p><a href="/viewPESD<%=PESD.idPESD%>"> PESD du <%=PESD.date%> <br/> avec <%=PESD.prenom%> <%=PESD.nom%></a>
                         </p>
                         <% } %>
